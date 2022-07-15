@@ -16,12 +16,7 @@
         mobileNumber: ""
     }
 
-    $: sendData = {
-        name: `${form.firstName} ${form.lastName}`,
-        email: form.email,
-        phoneNumber: form.mobileNumber,
-        password: form.password,
-    }
+   
 
     let isPasswordMacho;
     $: isPasswordMacho = passwordStrength(form.password)
@@ -53,17 +48,26 @@
             return false
         }else{
 
-            console.log(form );
+         let sendData = {
+                name: `${form.firstName} ${form.lastName}`,
+                email: form.email,
+                phoneNumber: form.mobileNumber,
+                password: form.password,
+            }
 
       
         await fetch(`${API}/auth/register`,{
             method: "POST",
+            headers: {
+                "Content-Type" : "application/json"
+            },
+
             body: JSON.stringify(sendData)
         })
         .then(res => res.json())
         .then(res => {
 
-            if (res.status) {
+            if (res.response.status) {
                 Swal.fire({
                 icon: "success",
                 titleText: "Email Send",

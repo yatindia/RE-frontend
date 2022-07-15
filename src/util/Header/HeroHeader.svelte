@@ -23,7 +23,7 @@
     <ul>
 
        {#if login}
-        <a href="/account">
+        <a href="/user/account">
             <li>ACCOUNT</li>
         </a>
         <a on:click|preventDefault={()=>logout()} href="/">

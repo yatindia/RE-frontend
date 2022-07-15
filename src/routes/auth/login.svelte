@@ -10,8 +10,34 @@
 
 
    let form = {
-       email: "sat@gmail.com",
-       password: "Sathyf123$%^&"
+       email: "dmdd@gmail.com",
+       password: "1212"
+   }
+
+   async function reverify(){
+            await fetch(`${API}/auth/reverification`,{
+                method: "POST",
+                headers: {
+                    "Content-Type" : "application/json"
+                },
+                body: JSON.stringify({email:form.email})
+            })
+            .then(res => res.json())
+            .then((res)=>{
+                if (res.response.status) {
+                    Swal.fire(
+                        'Email Send',
+                        'Please verify your account!',
+                        'success'
+                        )
+                } else {
+                    Swal.fire(
+                    'Somthing went wild?',
+                    'Please try again later',
+                    'question'
+                    )
+                }
+            })
    }
 
 
@@ -51,13 +77,34 @@
 
                 if (res.status) {
                     localStorage.setItem("login", JSON.stringify(res.data.token))
-                    window.location.href = "/account"
+                    window.location.href = "/user/account"
+                } else if(res.message = "please verify your account"){
+                    Swal.fire({
+                        icon: "question",
+                        titleText: "Verification pending",
+                        title: res.message
+                    })
+
+                    Swal.fire({
+                        title: 'Verification pending',
+                        titleText: "would you like to reverify",
+                        showDenyButton: true,
+                        confirmButtonText: 'Send',
+                        denyButtonText: `Don't send`,
+                        }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            reverify()
+                        } 
+                    })
+
+
                 } else {
                     Swal.fire({
-                    icon: "question",
-                    titleText: "Somthing Happened",
-                    title: res.message
-                })
+                        icon: "question",
+                        titleText: "Somthing Happened",
+                        title: res.message
+                    })
                 }
             })
 
