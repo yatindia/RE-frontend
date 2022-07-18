@@ -57,7 +57,9 @@
  
         
      </form>
-     <button type="submit" class="btn r w-100 mt-4"><i class="fa-solid fa-magnifying-glass"></i> SEARCH</button>
+     <a href="/search">
+        <button type="submit" class="btn r w-100 mt-4"><i class="fa-solid fa-magnifying-glass"></i> SEARCH</button>
+    </a>
 
      
  

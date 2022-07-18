@@ -1,11 +1,12 @@
 <script>
-    import Sidebar from "../../components/sidebar/sidebar.svelte";
-    import Tabbar from "../../components/tabbar/tabbar.svelte";
+import {protectedRoute} from "../../components/functions"
+import {onMount} from "svelte"
 
-    let body = 0;
+onMount(()=>protectedRoute())
     
 </script>
-<svelte:window on:resize={()=>console.log(body)} bind:innerWidth={body} />
+
+
 <div>
 
 
