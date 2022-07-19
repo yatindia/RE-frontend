@@ -8,6 +8,7 @@
     let body = 0;
     let token;
     let data = {}
+    let propertiess = {}
     let firstname = ""
     let lastname = ""
     
@@ -33,22 +34,281 @@
             }
         })
 
-        firstname = ((data.name).split(" "))[0]
-        lastname = ((data.name).split(" "))[1]
-
+        
 
 
     })
 
 
+const sendNumber = async (e) => {
+    let phoneNumber = {phoneNumber: data.phoneNumber}
 
+    await fetch(`${API}/auth/sendOTP`, {
+            method: "POST",
+            headers: {
+                "Content-Type" : "application/json",
+                "Authorization": `<Bearer> ${token}`
+            },
+      body: JSON.stringify(phoneNumber),
+            
+        })
+        .then(res => res.json())
+        .then((res)=>{
+            if (res.status) {
+                data = res.data
+                console.log(res.data);
+            }
+        })
+}
 
     
 </script>
 <svelte:window on:resize={()=>console.log(body)} bind:innerWidth={body} />
 
 
-    <div class="container">
+
+<div class="containerr">
+    <div class="userdetails">
+        <p>PROFILE</p>
+        <h3><span class="fs">Name    :</span>{data.name}</h3>
+        <h3><span class="fs">E-mail  :</span>{data.email}</h3>
+        <h3><span class="fs">Phone   :</span>{data.phoneNumber}</h3>
+        {#if  !data.mobileVerified}
+        <form on:submit|preventDefault = {
+            sendNumber
+        }>
+            <h6 class="text-danger mb-4">Phone number not verified</h6>
+            <input bind:value={data.phoneNumber} type="text" class="form-control" aria-describedby="emailHelp"
+                                placeholder="Enter email">
+            <button class="btn btn-danger w-100 mt-2" type="submit">Verify mobile</button>
+        </form>
+           
+        {/if}
+        <!-- <button class="btn btn-danger w-100 mt-4">
+            Log-out
+        </button> -->
+    </div>
+    <!-- <div class="line"></div> -->
+    <div >
+        <div>
+            <div class="col">
+                <h4>
+                    <strong class="mb-0">Update Email</strong>
+
+                </h4>
+                <form on:submit|preventDefault={()=>{}} >
+                    <div class="cover">
+                        <div class="form-group mt-2">
+                            <input bind:value={data.email} type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                                placeholder="Enter email">
+                        
+                        </div>
+                 
+                        <button type="submit" class="btn btn-danger w-100 mt-2">
+                            Update email
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div>
+            <div class="col mt-4">
+                <h4>
+                <strong class="mb-0">Updat password</strong>
+
+                </h4>
+                <form on:submit|preventDefault={()=>{}} >
+                    <div class="cover">
+                        <div class="form-group mt-2">
+                            <label for="exampleInputEmail1">New Password</label>
+                            <input bind:value={newPassword} type="text" class="form-control" placeholder="Enter New Password">
+                        </div>
+                        <div class="form-group mt-2">
+                            <label for="exampleInputEmail1">Old Password</label>
+                            <input bind:value={oldPassword} type="text" class="form-control" placeholder="Enter New Password">
+                        </div>
+                 
+                        <button type="submit" class="btn btn-danger w-100 mt-2">
+                            Update Password
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<style lang="scss">
+   .containerr {
+    width: 67%;
+    margin: 3% auto;
+    background-color: rgb(176, 253, 233);
+    height: auto;
+    padding: 36px 0;
+    display: flex;
+    justify-content: space-around;
+    border-radius: 12px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+    p {
+        font-size: 36px;
+    }
+
+    span {
+        font-size: 16px;
+        margin-right: 6px;
+    }
+    .userdetails {
+        
+        border-right: 2px solid rgb(179, 176, 176);
+        padding-right: 52px;
+        h3 {
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgb(196, 192, 192);
+        }
+        
+    }
+   
+   }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12 col-lg-10 col-xl-8 mx-auto">
                 <h2 class="h3 mb-4 page-title">Settings</h2>
@@ -153,12 +413,373 @@
             </div>
         </div>
         
-        </div>
+        </div> -->
 
 
 
 
-<style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <style>
  
     .main-bar {
         min-height: 50vh;
@@ -504,4 +1125,4 @@
     background-color: #17191c;
     border-color: #17191c;
 }
-</style>
+</style> -->
