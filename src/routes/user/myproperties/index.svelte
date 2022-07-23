@@ -7,7 +7,7 @@
 
     let token;
     let data = {}
-    let properties;
+    let properties=[]
 
     onMount(async ()=>{
 
@@ -42,7 +42,7 @@ await fetch(`${API}/singleuserproperty/user/${data._id}`, {
 
     if (res.status) {
         properties = res.data
-        console.log(res.data);
+        console.log(properties);
     }
 })
 
@@ -52,46 +52,95 @@ console.log(properties);
 </script>
 
 <div>
-    <div class="containerr">
-        
-          <div class="property">
-             <img src="/img/city.png" width="200px" height="180px" alt="">
-             <div class="prop-details">
-                <h3>Tittle</h3>
-                <h5>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi alias facnatus non fugiat.</h5>
-                <h5>buying option <small>location </small> </h5>
-                <div class="btnbox">
-                    <button class="btn btn-dark w-70 mt-2 update">Update</button>
-                    <button class="btn btn-danger w-70 mt-2 delete">Delete</button>
-                </div>
-             </div>
-          </div>
+    <div class="containerr bg-light">
+        <div class="property">
+            <img src="/img/indexi.jpeg" class="img-fluid" alt="">
+         <div class="prop-details">
+            <h3>Tittle</h3>
+            <h5>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi alias facnatus non fugiat.</h5>
+            <h5>buyingOption <small>location </small> </h5>
+            <div class="btnbox">
+                <button class="btn btn-info w-70 mt-2 update">Update</button>
+                <button class="btn btn-danger w-70 mt-2 delete">Delete</button>
+            </div>
+         </div>
+      </div>
+      <div class="property">
+        <img src="/img/indexi.jpeg" class="img-fluid" alt="">
+        <div class="prop-details">
+           <h3>Tittle</h3>
+           <h5>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi alias facnatus non fugiat.</h5>
+           <h5>buyingOption <small>location </small> </h5>
+           <div class="btnbox">
+               <button class="btn btn-info w-70 mt-2 update">Update</button>
+               <button class="btn btn-danger w-70 mt-2 delete">Delete</button>
+           </div>
+        </div>
+     </div>
+     <div class="property">
+        <img src="/img/indexi.jpeg" class="img-fluid" alt="">
+        <div class="prop-details">
+           <h3>Tittle</h3>
+           <h5>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi alias facnatus non fugiat.</h5>
+           <h5>buyingOption <small>location </small> </h5>
+           <div class="btnbox">
+               <button class="btn btn-info w-70 mt-2 update">Update</button>
+               <button class="btn btn-danger w-70 mt-2 delete">Delete</button>
+           </div>
+        </div>
+     </div>
+     <div class="property">
+        <img src="/img/indexi.jpeg" class="img-fluid" alt="">
+        <div class="prop-details">
+           <h3>Tittle</h3>
+           <h5>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi alias facnatus non fugiat.</h5>
+           <h5>buyingOption <small>location </small> </h5>
+           <div class="btnbox">
+               <button class="btn btn-info w-70 mt-2 update">Update</button>
+               <button class="btn btn-danger w-70 mt-2 delete">Delete</button>
+           </div>
+        </div>
+     </div>
+     <div class="property">
+         <img src="/img/indexi.jpeg" class="img-fluid" alt="">
+         <div class="prop-details">
+            <h3>Tittle</h3>
+            <h5>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi alias facnatus non fugiat.</h5>
+            <h5>buyingOption <small>location </small> </h5>
+            <div class="btnbox">
+                <button class="btn btn-info w-70 mt-2 update">Update</button>
+                <button class="btn btn-danger w-70 mt-2 delete">Delete</button>
+            </div>
+         </div>
+      </div>
+       
+          
     </div>
 </div>
 
 <style lang="scss">
     .containerr {
-    width: 67%;
+    width: 80%;
     margin: 3% auto;
-    background-color: rgb(176, 253, 233);
-    height: 400px;
+    height: 500px;
     padding: 32px 0;
-    display: flex;
-    justify-content: space-around;
+    // display: flex;
+    // flex-direction: column;
+    // justify-content: space-around;
+    overflow: scroll;
     border-radius: 12px;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
     .property {
+        background-color: #fff;
         border: 1px solid rgb(190, 186, 186);
         border-radius: 8px;
         width: 90%;
         height: auto;
-        margin: 0 auto;
         display: flex;
-        height: 220px;
+        gap: 15px;
         padding: 16px;
-        .prop-details {
-            margin-left: 16px;
-        }
+        margin: 16px auto;
+        
         .btnbox {
             display: flex;
             .update {
@@ -100,4 +149,17 @@ console.log(properties);
         }
     }
     }
+    @media(max-width:1000px) {
+    .containerr {
+        width: 98%;
+    }
+   }
+   @media(max-width:826px) {
+    .containerr {
+        width: 70%;
+        .property {
+            flex-direction: column;
+        }
+    }
+   }
 </style>

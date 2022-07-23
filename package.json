@@ -11,8 +11,9 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/kit": "next",
+		"@tomtom-international/web-sdk-maps": "^6.20.0",
+		"dotenv": "^16.0.1",
 		"node-sass": "^7.0.1",
-		"react-bootstrap": "^2.4.0",
 		"sass": "^1.53.0",
 		"svelte": "^3.48.0",
 		"svelte-preprocess": "^4.10.7"
@@ -21,6 +22,7 @@
 	"dependencies": {
 		"check-password-strength": "^2.0.5",
 		"svelte-cubed": "^0.2.1",
+		"svelte-select": "^4.4.7",
 		"sweetalert2": "^11.4.20",
 		"three": "^0.142.0"
 	}

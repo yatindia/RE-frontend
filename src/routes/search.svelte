@@ -1,21 +1,359 @@
 <script>
-    import {fade} from "svelte/transition"
+    // import {fade} from "svelte/transition"
+    import tt from "@tomtom-international/web-sdk-maps";
+import '@tomtom-international/web-sdk-maps/dist/maps.css'
+import { onMount } from "svelte";
+import Select from 'svelte-select';
+
+    import dotenv from "dotenv";
+dotenv.config();
+const tt_api = process.env.TOMTOM_API_KEY
+
+
+
+let mapElement;
+let map
+    onMount(() => {
+      let Ll = { lat: 52.377956, lng: 4.897070 }
+       map = tt.map({
+        key: tt_api,
+        container: mapElement,
+        
+        center: Ll,
+        zoom: 10
+      });
+
+
+let companyAssets = [
+                { lat: 52.373627, lng: 4.902642 },
+                { lat: 52.3659, lng: 4.927198 },
+                { lat: 52.347878, lng: 4.893488 },
+                { lat: 52.349447, lng: 4.858433 }];
+            companyAssets.forEach(function (child) {
+                new tt.Marker().setLngLat(child).addTo(map);
+            });     
+    });
+    
+    
 </script>
 
-<div class="ex-wrap">
-    <div class="wrapper">
-        <div class="search">
-          <input type="text" placeholder="Search...">
-          <div class="autocomp-box">
-    
-          </div>
-          <div class="icon">
-            <ion-icon size="large" name="search-sharp"></ion-icon>
-          </div>
-        </div>
-      </div>
-</div>
+<div class='containe my-2'>
+  <input type="text" class="px-4 mx-2 p-2" placeholder="Search...">
 
+  <select class="custom-select p-2 mx-1">
+    <option selected>Lease</option>
+    <option value="1">Buy</option>
+    <option value="2">Lease</option>
+    <option value="3">Rent</option>
+  </select>
+  <select class="custom-select p-2 mx-1">
+    <option selected>Property type</option>
+    <option value="1">Office</option>
+    <option value="2">Industry</option>
+    <option value="3">Retail</option>
+  </select>
+  <select class="custom-select p-2 mx-1">
+    <option selected>Property size</option>
+    <option value="1">One</option>
+    <option value="2">Two</option>
+    <option value="3">Three</option>
+  </select>
+</div>
+<!-- class="my-5" -->
+<main>
+    <div class="containerr">
+      <!--Grid row-->
+      <div class="row">
+        <div class="col-md-7 mb-4 bg-light map position-sticky" bind:this={mapElement}>
+          <div class="text">Google Ad</div>
+
+       
+      </div>
+        <!--Grid column-->
+        <div class="col-md-5 mb-4">
+          <!--Section: Content-->
+          <section class="prop-box">
+            <!-- Post -->
+            <div class="row property">
+              <div class="col-md-5 image-box">
+                <div class="bg-image hover-overlay shadow-1-strong rounded ripple" data-mdb-ripple-color="light">
+                    <!-- <img src="/img/imagesr2.jpeg" class="img-fluid"/> -->
+
+                  <a href="#!">
+                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                  </a>
+                </div>
+              </div>
+
+              <div class="col-md-7 mb-4">
+                <h5>
+
+220-260 S Main St</h5>
+<small>location</small>
+<div class='prop-details'>
+  <p>Built year</p>
+  <p>Size of property</p>
+  <p>Price</p>
+</div>
+                <!-- <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus ratione
+                  necessitatibus itaque error alias repellendus nemo.
+                </p> -->
+                <!-- <div class="d-flex gap-4"><h5>buyingoption</h5>
+                <h5>Price</h5></div> -->
+                <!-- <div><div class="d-flex align-items-center"><h4>Tittle</h4>,<span><small>location</small></span></div>
+                                  <button type="button" class="btn btn-primary btn-info">View property</button>
+                </div> -->
+                
+
+              </div>
+            </div>
+
+            <!-- Post -->
+            <div class="row property">
+              <div class="col-md-5 image-box">
+                <div class="bg-image hover-overlay shadow-1-strong rounded ripple" data-mdb-ripple-color="light">
+                    <!-- <img src="/img/imagesr2.jpeg" class="img-fluid"/> -->
+
+                  <a href="#!">
+                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                  </a>
+                </div>
+              </div>
+
+              <div class="col-md-7">
+                <h5>
+
+220-260 S Main St</h5>
+<small>location</small>
+<div class='prop-details'>
+  <p>Built year</p>
+  <p>Size of property</p>
+  <p>Price</p>
+</div>
+                <!-- <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus ratione
+                  necessitatibus itaque error alias repellendus nemo.
+                </p> -->
+                <!-- <div class="d-flex gap-4"><h5>buyingoption</h5>
+                <h5>Price</h5></div>
+                <div><div class="d-flex align-items-center"><h4>Tittle</h4>,<span><small>location</small></span></div>
+                                  <button type="button" class="btn btn-primary btn-info">View property</button>
+                </div> -->
+                
+
+              </div>
+            </div>
+
+            <!-- Post -->
+            <div class="row property">
+              <div class="col-md-5 image-box">
+                <div class="bg-image hover-overlay shadow-1-strong rounded ripple" data-mdb-ripple-color="light">
+                    <!-- <img src="/img/imagesr2.jpeg" class="img-fluid"/> -->
+
+                  <a href="#!">
+                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                  </a>
+                </div>
+              </div>
+
+              <div class="col-md-7 mb-4">
+                <h5>
+
+220-260 S Main St</h5><small>location</small>
+<div class='prop-details'>
+  <p>Built year</p>
+  <p>Size of property</p>
+  <p>Price</p>
+</div>
+                <!-- <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus ratione
+                  necessitatibus itaque error alias repellendus nemo.
+                </p> -->
+                <!-- <div class="d-flex gap-4"><h5>buyingoption</h5>
+                <h5>Price</h5></div>
+                <div><div class="d-flex align-items-center"><h4>Tittle</h4>,<span><small>location</small></span></div>
+                                  <button type="button" class="btn btn-primary btn-info">View property</button>
+                </div> -->
+                
+
+              </div>
+            </div>
+
+            <!-- Post -->
+            <div class="row property">
+   <div class="col-md-5 image-box">
+                <div class="bg-image hover-overlay shadow-1-strong rounded ripple" data-mdb-ripple-color="light">
+                  <!-- <img src="/img/imagesr2.jpeg" class="img-fluid"/> -->
+                  <a href="#!">
+                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                  </a>
+                </div>
+              </div>
+
+              <div class="col-md-7 mb-4">
+               <h5>
+
+220-260 S Main St</h5>
+<small>location</small>
+<div class='prop-details'>
+  <p>Built year</p>
+  <p>Size of property</p>
+  <p>Price</p>
+</div>
+                <!-- <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus ratione
+                  necessitatibus itaque error alias repellendus nemo.
+                </p> -->
+                <!-- <div class="d-flex gap-4"><h5>buyingoption</h5>
+                <h5>Price</h5></div>
+                <div><div class="d-flex align-items-center"><h4>Tittle</h4>,<span><small>location</small></span></div>
+                                  <button type="button" class="btn btn-primary btn-info">View property</button>
+                </div> -->
+                
+
+              </div>
+            </div>
+          </section>
+          <!--Section: Content-->
+        </div>
+       
+
+        
+        
+        
+      </div>
+     
+
+      <!-- Pagination -->
+      <!-- <nav class="my-4" aria-label="...">
+        <ul class="pagination pagination-circle justify-content-center">
+          <li class="page-item">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+          </li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item active" aria-current="page">
+            <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+          </li>
+        </ul>
+      </nav> -->
+    </div>
+  </main>
+
+
+
+<style lang="scss">
+  .containerr {
+    .map {
+      border: #C1202C solid 2px;
+      // height: 65vh;
+      // position: sticky;
+      // top: 0vh;
+    }
+    .prop-box {
+      height: 65vh;
+      overflow-y: scroll;
+      
+      .image-box {
+        background: url(/img/imagesr2.jpeg) no-repeat;
+        background-position: center;
+        background-size: cover;
+      }
+      .prop-details {
+        margin-top:6px
+      } p{
+        margin: 0;
+        padding:0;
+      }
+    }
+  }
+  .property {
+        background-color:aliceblue;
+        padding:6px;
+        margin: 0 6px;
+        border: 3px transparent solid;
+        transition: all 0.2s;
+      }
+  .property:hover {
+          border: 3px solid rgb(226, 41, 41);
+          border-radius: 8px;
+        }
+
+
+
+
+
+
+    </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
 <div class="container">
     <div class="row ng-scope">
         <div class="col-md-3 col-md-push-9">
@@ -117,198 +455,4 @@
             </div>
         </div>
     </div>
-    </div>
-
-
-<style lang="scss">
-
-.dp-list {
-    list-style: none;
-    padding: 0;
-
-    li {
-        background-color: #C1202C;
-        padding: 10px;
-        margin-bottom: 10px;
-        a {
-            text-decoration: none;
-            color: #fff;
-            font-weight: bold;
-        }
-    }
-}
-
-
-.search-result-categories>li>a {
-    color: #b6b6b6;
-    font-weight: 400
-}
-
-.search-result-categories>li>a:hover {
-    background-color: #ddd;
-    color: #555
-}
-
-.search-result-categories>li>a>.glyphicon {
-    margin-right: 5px
-}
-
-.search-result-categories>li>a>.badge {
-    float: right
-}
-
-.search-results-count {
-    margin-top: 10px
-}
-
-.search-result-item {
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 4px
-}
-
-.search-result-item:after,
-.search-result-item:before {
-    content: " ";
-    display: table
-}
-
-.search-result-item:after {
-    clear: both
-}
-
-.search-result-item .image-link {
-    display: block;
-    overflow: hidden;
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px
-}
-
-@media (min-width:768px) {
-    .search-result-item .image-link {
-        display: inline-block;
-        margin: -20px 0 -20px -20px;
-        float: left;
-        width: 200px
-    }
-}
-
-@media (max-width:767px) {
-    .search-result-item .image-link {
-        max-height: 200px
-    }
-}
-
-.search-result-item .image {
-    max-width: 100%
-}
-
-.search-result-item .info {
-    margin-top: 2px;
-    font-size: 12px;
-    color: #999
-}
-
-.search-result-item .description {
-    font-size: 13px
-}
-
-.search-result-item+.search-result-item {
-    margin-top: 20px
-}
-
-@media (min-width:768px) {
-    .search-result-item-body {
-        margin-left: 200px
-    }
-}
-
-.search-result-item-heading {
-    font-weight: 400
-}
-
-.search-result-item-heading>a {
-    color: #555
-}
-
-@media (min-width:768px) {
-    .search-result-item-heading {
-        margin: 0
-    }
-}
-
-
-
-.ex-wrap {
-    background-color: #C1202C;
-    padding: 30px 0;
-    margin-bottom: 30px;
-}
-
-.wrapper {
-  max-width: 600px;
-  margin: 0 auto;
-}
-.wrapper .search {
-  background: #fff;
-  width: 100%;
-  border-radius: 5px;
-  position: relative;
-  box-shadow: 0px 1px 5px 3px rgba(0, 0, 0, 0.12);
-}
-.search input {
-  height: 55px;
-  width: 100%;
-  outline: none;
-  border: none;
-  border-radius: 5px;
-  padding: 0 60px 0 20px;
-  font-size: 18px;
-  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
-}
-.search.active input {
-  border-radius: 5px 5px 0 0;
-}
-.search .autocomp-box {
-  padding: 0;
-  opacity: 0;
-  pointer-events: none;
-  max-height: 280px;
-  overflow-y: auto;
-}
-.search.active .autocomp-box {
-  padding: 10px 8px;
-  opacity: 1;
-  pointer-events: auto;
-}
-.autocomp-box li {
-  list-style: none;
-  padding: 8px 12px;
-  display: none;
-  width: 100%;
-  cursor: default;
-  border-radius: 3px;
-}
-.search.active .autocomp-box li {
-  display: block;
-}
-.autocomp-box li:hover {
-  background: #efefef;
-}
-.search .icon {
-  position: absolute;
-  right: 0px;
-  top: 0px;
-  height: 55px;
-  width: 55px;
-  text-align: center;
-  line-height: 70px;
-  font-size: 20px;
-  color: #3a0ca3;
-  cursor: pointer;
-}
-
-
-
-
-    </style>
+    </div> -->

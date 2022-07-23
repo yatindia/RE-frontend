@@ -67,7 +67,7 @@ const sendNumber = async (e) => {
 
 
 
-<div class="containerr">
+<div class="containerr bg-lite">
     <div class="userdetails">
         <p>PROFILE</p>
         <h3><span class="fs">Name    :</span>{data.name}</h3>
@@ -89,6 +89,7 @@ const sendNumber = async (e) => {
         </button> -->
     </div>
     <!-- <div class="line"></div> -->
+    <hr width="1" size="auto">
     <div >
         <div>
             <div class="col">
@@ -145,13 +146,12 @@ const sendNumber = async (e) => {
    .containerr {
     width: 67%;
     margin: 3% auto;
-    background-color: rgb(176, 253, 233);
     height: auto;
-    padding: 36px 0;
+    padding: 36px 22px;
     display: flex;
     justify-content: space-around;
     border-radius: 12px;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 
     p {
         font-size: 36px;
@@ -163,8 +163,8 @@ const sendNumber = async (e) => {
     }
     .userdetails {
         
-        border-right: 2px solid rgb(179, 176, 176);
-        padding-right: 52px;
+        // border-right: 2px solid rgb(179, 176, 176);
+        // padding-right: 52px;
         h3 {
             padding-bottom: 12px;
             border-bottom: 1px solid rgb(196, 192, 192);
@@ -172,6 +172,17 @@ const sendNumber = async (e) => {
         
     }
    
+   }
+   @media(max-width:976px) {
+    .containerr {
+        width: 60%;
+        flex-direction: column;
+    }
+   }
+   @media(max-width:678px) {
+    .containerr {
+        width: 75%;
+    }
    }
 </style>
 
