@@ -4,7 +4,7 @@
   <!-- Footer -->
 
 
-  <footer class="text-center text-lg-start bg-light text-muted">
+  <footer class="text-center text-lg-start bg-dangertext-muted">
     <!-- Section: Social media -->
     <section
       class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom"
@@ -49,7 +49,7 @@
           <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
             <!-- Content -->
             <h6 class="text-uppercase fw-bold mb-4">
-              <i class="fas fa-gem me-3"></i>Company name
+             <img width="200px" src="http://localhost:3000/img/logo.png" alt="">
             </h6>
             <p>
               Here you can use rows and columns to organize your footer content. Lorem ipsum
@@ -129,3 +129,17 @@
     <!-- Copyright -->
   </footer>
   <!-- Footer -->
+
+
+
+  <style lang="scss">
+
+
+    footer {
+      background-color: rgb(193,32,44);
+
+      * {
+        color: #fff;
+      }
+    }
+  </style>
