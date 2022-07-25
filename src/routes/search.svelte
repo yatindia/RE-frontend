@@ -3,7 +3,7 @@
     import { onMount } from 'svelte'
 
     import mapboxgl from "mapbox-gl";
-    mapboxgl.accessToken = 'pk.eyJ1Ijoic2F0aHlhZGV2IiwiYSI6ImNsM3R5bGh1cjBlZ2wzaXBjazI2ZTBnMm8ifQ.GLQgbjT3w49JfCTJ_iEsQA'
+    mapboxgl.accessToken = ''
 
     const tt_api = "9Ui8i6g81l18C2lAZqhVIbe6GDjtGTxg"
 
