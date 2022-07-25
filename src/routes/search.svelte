@@ -17,7 +17,7 @@
       container: "map",
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [16.37, 48.2],
-      // zoom: 12,
+      zoom: 12,
     });
    
 
