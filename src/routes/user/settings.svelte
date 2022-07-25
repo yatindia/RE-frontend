@@ -69,11 +69,14 @@ const sendNumber = async (e) => {
 
 <div class="containerr bg-lite">
     <div class="userdetails">
-        <p>PROFILE</p>
-        <h3><span class="fs">Name    :</span>{data.name}</h3>
-        <h3><span class="fs">E-mail  :</span>{data.email}</h3>
-        <h3><span class="fs">Phone   :</span>{data.phoneNumber}</h3>
-        {#if  !data.mobileVerified}
+        <h4>
+            <strong class="mb-0">User details</strong>
+
+        </h4>
+        <h5><span>Name    :</span>{data.name}</h5>
+        <h5><span>E-mail  :</span>{data.email}</h5>
+        <!-- <h3><span class="fs">Phone   :</span>{data.phoneNumber}</h3> -->
+        <!-- {#if  !data.mobileVerified}
         <form on:submit|preventDefault = {
             sendNumber
         }>
@@ -83,7 +86,7 @@ const sendNumber = async (e) => {
             <button class="btn btn-danger w-100 mt-2" type="submit">Verify mobile</button>
         </form>
            
-        {/if}
+        {/if} -->
         <!-- <button class="btn btn-danger w-100 mt-4">
             Log-out
         </button> -->
@@ -100,7 +103,7 @@ const sendNumber = async (e) => {
                 <form on:submit|preventDefault={()=>{}} >
                     <div class="cover">
                         <div class="form-group mt-2">
-                            <input bind:value={data.email} type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                            <input bind:value={data.email} type="text" class="form-control my-2" id="exampleInputEmail1" aria-describedby="emailHelp"
                                 placeholder="Enter email">
                         
                         </div>
@@ -122,11 +125,11 @@ const sendNumber = async (e) => {
                     <div class="cover">
                         <div class="form-group mt-2">
                             <label for="exampleInputEmail1">New Password</label>
-                            <input bind:value={newPassword} type="text" class="form-control" placeholder="Enter New Password">
+                            <input bind:value={newPassword} type="text" class="form-control my-2" placeholder="Enter New Password">
                         </div>
                         <div class="form-group mt-2">
                             <label for="exampleInputEmail1">Old Password</label>
-                            <input bind:value={oldPassword} type="text" class="form-control" placeholder="Enter New Password">
+                            <input bind:value={oldPassword} type="text" class="form-control my-2" placeholder="Enter New Password">
                         </div>
                  
                         <button type="submit" class="btn btn-danger w-100 mt-2">
@@ -144,12 +147,14 @@ const sendNumber = async (e) => {
 
 <style lang="scss">
    .containerr {
-    width: 67%;
+    width: 36%;
     margin: 3% auto;
     height: auto;
-    padding: 36px 22px;
+    padding: 36px 42px;
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
+    gap: 3%;
+    // justify-content: space-around;
     border-radius: 12px;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 

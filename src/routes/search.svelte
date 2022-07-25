@@ -1,9 +1,9 @@
 <script>
     // import {fade} from "svelte/transition"
-    import tt from "@tomtom-international/web-sdk-maps";
-    import '@tomtom-international/web-sdk-maps/dist/maps.css'
-    import { onMount } from "svelte";
-    import Select from 'svelte-select';
+    import { onMount } from 'svelte'
+
+    import mapboxgl from "mapbox-gl";
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic2F0aHlhZGV2IiwiYSI6ImNsM3R5bGh1cjBlZ2wzaXBjazI2ZTBnMm8ifQ.GLQgbjT3w49JfCTJ_iEsQA'
 
     const tt_api = "9Ui8i6g81l18C2lAZqhVIbe6GDjtGTxg"
 
@@ -12,31 +12,35 @@
     let mapElement;
     let map
         onMount(() => {
-          let Ll = { lat: 52.377956, lng: 4.897070 }
-          map = tt.map({
-            key: tt_api,
-            container: mapElement,
-            
-            center: Ll,
-            zoom: 10
-          });
+     
+    const map = new mapboxgl.Map({
+      container: "map",
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [16.37, 48.2],
+      // zoom: 12,
+    });
+   
 
+    map.addControl(
+new mapboxgl.GeolocateControl({
+positionOptions: {
+enableHighAccuracy: true
+},
 
-    let companyAssets = [
-                    { lat: 52.373627, lng: 4.902642 },
-                    { lat: 52.3659, lng: 4.927198 },
-                    { lat: 52.347878, lng: 4.893488 },
-                    { lat: 52.349447, lng: 4.858433 }];
-                companyAssets.forEach(function (child) {
-                    new tt.Marker().setLngLat(child).addTo(map);
-                });     
+trackUserLocation: true,
+
+showUserHeading: true,
+trackUserLocation: true
+})
+);
+    
         });
     
     
 </script>
 
 <div class='containe my-2'>
-  <input type="text" class="px-4 mx-2 p-2" placeholder="Search...">
+  <input type="text" class="px-4 mx-2 p-2 geocoder" id="geocoder" placeholder="Search...">
 
   <select class="custom-select p-2 mx-1">
     <option selected>Lease</option>
@@ -62,8 +66,9 @@
     <div class="containerr">
       <!--Grid row-->
       <div class="row">
-        <div class="col-md-7 mb-4 bg-light map position-sticky" bind:this={mapElement}>
-          <div class="text">Google Ad</div>
+        <div class="col-md-7 mb-4 bg-light map position-sticky" id="map">
+          <!-- <div class="text">Google Ad</div> -->
+        
 
        
       </div>
@@ -139,7 +144,7 @@
 <style lang="scss">
   .containerr {
     .map {
-      border: #C1202C solid 2px;
+      // border: #C1202C solid 2px;
       // height: 65vh;
       // position: sticky;
       // top: 0vh;
