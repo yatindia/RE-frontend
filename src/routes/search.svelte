@@ -5,7 +5,7 @@
     import mapboxgl from "mapbox-gl";
     mapboxgl.accessToken = ''
 
-    const tt_api = "9Ui8i6g81l18C2lAZqhVIbe6GDjtGTxg"
+    
 
 
 
