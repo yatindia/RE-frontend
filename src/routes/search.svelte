@@ -3,22 +3,129 @@
     import { onMount } from 'svelte'
 
     import mapboxgl from "mapbox-gl";
-    mapboxgl.accessToken = 'pk.eyJ1Ijoic2F0aHlhZGV2IiwiYSI6ImNsM3R5bGh1cjBlZ2wzaXBjazI2ZTBnMm8ifQ.GLQgbjT3w49JfCTJ_iEsQA'
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic2F0aHlhZGV2IiwiYSI6ImNsM3R5bGh1cjBlZ2wzaXBjazI2ZTBnMm8ifQ.GLQgbjT3w49JfCTJ_iEsQA';
+
 
     
+const data = [
+	{
+		"location": "Manhattan Ave & Norman Ave at NE corner",
+		"city": "Brooklyn",
+		"state": "New York",
+		"coordinates": [-83.9516030004786,50.82557300071668],
+	},
+	{
+		"location": "6th Ave & 42nd St at NW corner",
+		"city": "Manhattan",
+		"state": "New York",
+		"coordinates": [-83.98393399979334,50.85533300052329],
+	},
+	{
+		"location": "Essex St & Delancey St at SE corner",
+		"city": "Manhattan",
+		"state": "New York",
+		"coordinates": [-83.9882730001973,50.818207001246554],
+	},
+  {
+		"location": "Manhattan Ave & Norman Ave at NE corner",
+		"city": "Brooklyn",
+		"state": "New York",
+		"coordinates": [-53.9516030004786,46.82557300071668],
+	},
+	{
+		"location": "6th Ave & 42nd St at NW corner",
+		"city": "Manhattan",
+		"state": "New York",
+		"coordinates": [-53.98393399979334,46.85533300052329],
+	},
+	{
+		"location": "Essex St & Delancey St at SE corner",
+		"city": "Manhattan",
+		"state": "New York",
+		"coordinates": [-53.9882730001973,46.818207001246554],
+	},
+  {
+		"location": "Manhattan Ave & Norman Ave at NE corner",
+		"city": "Brooklyn",
+		"state": "New York",
+		"coordinates": [-63.9516030004786,38.82557300071668],
+	},
+	{
+		"location": "6th Ave & 42nd St at NW corner",
+		"city": "Manhattan",
+		"state": "New York",
+		"coordinates": [-63.98393399979334,38.85533300052329],
+	},
+	{
+		"location": "Essex St & Delancey St at SE corner",
+		"city": "Manhattan",
+		"state": "New York",
+		"coordinates": [-63.9882730001973,38.818207001246554],
+	},
+  {
+		"location": "Manhattan Ave & Norman Ave at NE corner",
+		"city": "Brooklyn",
+		"state": "New York",
+		"coordinates": [-73.9516030004786,42.82557300071668],
+	},
+	{
+		"location": "6th Ave & 42nd St at NW corner",
+		"city": "Manhattan",
+		"state": "New York",
+		"coordinates": [-73.98393399979334,42.85533300052329],
+	},
+	{
+		"location": "Essex St & Delancey St at SE corner",
+		"city": "Manhattan",
+		"state": "New York",
+		"coordinates": [-73.9882730001973,42.818207001246554],
+	}
+]
+
+console.log(data);
+
+let token;
+onMount( async ()=>{
+ token =     window.localStorage
+.getItem("login");
+token = JSON.parse(token)
+
+// const response = await fetch(`http://127.0.0.1:5000/property`, {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: `Bearer ${token}`,
+//         },
+//       });
 
 
-
-    let mapElement;
-    let map
+})
+   
         onMount(() => {
+
+          
      
               const map = new mapboxgl.Map({
                 container: "map",
                 style: 'mapbox://styles/mapbox/streets-v11',
                 center: [16.37, 48.2],
-                zoom: 12,
+                // zoom: 12,
               });
+
+              map.on('load', () => {
+                data.forEach((location) => {
+			console.log(location)
+			let marker = new mapboxgl.Marker()
+							.setLngLat(location.coordinates)
+							.addTo(map);
+
+		})
+
+
+   
+    });
+
+            
             
 
               map.addControl(
@@ -33,14 +140,43 @@
                   trackUserLocation: true
                   })
         );
+
+      
     
         });
+
+        let properties;
+
+        const searchProperty = async (e) => {
+          console.log(e);
+          let search={
+            search:e.target.value,
+            skip:1,
+            limit:8
+          };
+          const response = await fetch(`http://127.0.0.1:5000/property/search`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+       
+      body: JSON.stringify(search),
+
+      });
+      const data = await response.json();
+      properties = data.data[0];
+      console.log(properties);
+        }
     
     
 </script>
-
+<svelte:head>
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css' rel='stylesheet' />
+</svelte:head>
 <div class='containe my-2'>
-  <input type="text" class="px-4 mx-2 p-2 geocoder" id="geocoder" placeholder="Search...">
+  <input type="text" class="px-4 mx-2 p-2 geocoder" id="geocoder" placeholder="Search..." on:change={searchProperty}>
 
   <select class="custom-select p-2 mx-1">
     <option selected>Lease</option>
@@ -76,8 +212,8 @@
         <div class="col-md-5 mb-4">
           <!--Section: Content-->
           <section class="prop-box">
-   
-            {#each Array(100) as i }
+            {#if properties}
+            {#each properties as i }
 
             <!-- Post -->
            <a href="/view/property/askjhdakljdsafs56654dfs" style="all:unset">
@@ -106,6 +242,9 @@
             </div>
            </a>
             {/each}
+            {/if}
+   
+           
 
  
 
