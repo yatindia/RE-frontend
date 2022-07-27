@@ -3,7 +3,7 @@
     import { onMount } from 'svelte'
 
     import mapboxgl from "mapbox-gl";
-    mapboxgl.accessToken = ''
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic2F0aHlhZGV2IiwiYSI6ImNsM3R5bGh1cjBlZ2wzaXBjazI2ZTBnMm8ifQ.GLQgbjT3w49JfCTJ_iEsQA'
 
     
 
@@ -13,26 +13,26 @@
     let map
         onMount(() => {
      
-    const map = new mapboxgl.Map({
-      container: "map",
-      style: 'mapbox://styles/mapbox/streets-v11',
-      center: [16.37, 48.2],
-      zoom: 12,
-    });
-   
+              const map = new mapboxgl.Map({
+                container: "map",
+                style: 'mapbox://styles/mapbox/streets-v11',
+                center: [16.37, 48.2],
+                zoom: 12,
+              });
+            
 
-    map.addControl(
-new mapboxgl.GeolocateControl({
-positionOptions: {
-enableHighAccuracy: true
-},
+              map.addControl(
+                  new mapboxgl.GeolocateControl({
+                  positionOptions: {
+                  enableHighAccuracy: true
+                  },
 
-trackUserLocation: true,
+                  trackUserLocation: true,
 
-showUserHeading: true,
-trackUserLocation: true
-})
-);
+                  showUserHeading: true,
+                  trackUserLocation: true
+                  })
+        );
     
         });
     
