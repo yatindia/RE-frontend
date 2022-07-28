@@ -1,6 +1,7 @@
 <script>
     // import {fade} from "svelte/transition"
     import { onMount } from 'svelte'
+    import { paginate, LightPaginationNav } from 'svelte-paginate'
 
     import mapboxgl from "mapbox-gl";
     mapboxgl.accessToken = 'pk.eyJ1Ijoic2F0aHlhZGV2IiwiYSI6ImNsM3R5bGh1cjBlZ2wzaXBjazI2ZTBnMm8ifQ.GLQgbjT3w49JfCTJ_iEsQA';
@@ -151,7 +152,7 @@ token = JSON.parse(token)
           console.log(e);
           let search={
             search:e.target.value,
-            skip:1,
+            skip:0,
             limit:8
           };
           const response = await fetch(`http://127.0.0.1:5000/property/search`, {
@@ -169,7 +170,10 @@ token = JSON.parse(token)
       console.log(properties);
         }
     
-    
+  //       let items = properties
+  // let currentPage = 1
+  // let pageSize = 4
+  // $: paginatedItems = paginate({ items, pageSize, currentPage })
 </script>
 <svelte:head>
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.js'></script>
@@ -213,27 +217,29 @@ token = JSON.parse(token)
           <!--Section: Content-->
           <section class="prop-box">
             {#if properties}
-            {#each properties as i }
+            {#each properties as property }
 
             <!-- Post -->
-           <a href="/view/property/askjhdakljdsafs56654dfs" style="all:unset">
+           <a href="/view/property/{property._id}" style="all:unset">
             <div class="row property">
               <div class="col-md-5 image-box" >
-                <div class="bg-image hover-overlay shadow-1-strong rounded ripple" data-mdb-ripple-color="light">
-                    <!-- <img src="/img/imagesr2.jpeg" class="img-fluid"/> -->
+                
+                    <img src="/img/imagesr2.jpeg" class="img-fluid"/>
+                    <img src="/img/imagesr2.jpeg" class="img-fluid"/>
+                    <img src="/img/imagesr2.jpeg" class="img-fluid"/>
+                    <img src="/img/imagesr2.jpeg" class="img-fluid"/>
 
-                  <a href="#!">
-                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                  </a>
-                </div>
+
+                 
+                
               </div>
 
               <div class="col-md-7">
                 <h5> 220-260 S Main St</h5>
                 <small>location</small>
                 <div class='prop-details'>
-                  <p>Built year</p>
-                  <p>Size of property</p>
+                  <p>{property.year_built}</p>
+                  <p>{property.building_size}</p>
                   <p>Price</p>
                 </div>
 
@@ -249,6 +255,14 @@ token = JSON.parse(token)
  
 
           </section>
+          <!-- <LightPaginationNav
+  totalItems="{items.length}"
+  pageSize="{pageSize}"
+  currentPage="{currentPage}"
+  limit="{1}"
+  showStepOptions="{true}"
+  on:setPage="{(e) => currentPage = e.detail.page}"
+/> -->
           <!--Section: Content-->
         </div>
        
@@ -292,11 +306,7 @@ token = JSON.parse(token)
       height: 65vh;
       overflow-y: scroll;
       
-      .image-box {
-        background: url(/img/imagesr2.jpeg) no-repeat;
-        background-position: center;
-        background-size: cover;
-      }
+      
       .prop-details {
         margin-top:6px
       } p{
@@ -318,7 +328,22 @@ token = JSON.parse(token)
         }
 
 
-
+        .image-box {
+        // background: url(/img/imagesr2.jpeg) no-repeat;
+        // background-position: center;
+        // background-size: cover;
+      display: flex;
+        margin-top: 12px;
+        height: 110px;
+      width: 180px;
+      overflow: hidden;
+      img {
+        transition: all 0.2s ease-in-out;
+        :hover {
+          transform: translateX(-180px,0);
+        }
+      }
+      }
 
 
 
