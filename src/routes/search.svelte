@@ -83,24 +83,20 @@ const data = [
 	}
 ]
 
-console.log(data);
 
-let token;
-onMount( async ()=>{
- token =     window.localStorage
-.getItem("login");
-token = JSON.parse(token)
+        let token;
+        onMount( async ()=>{
+          
+            token = JSON.parse(localStorage.getItem("login"))
 
-// const response = await fetch(`http://127.0.0.1:5000/property`, {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${token}`,
-//         },
-//       });
-
-
-})
+            // const response = await fetch(`http://127.0.0.1:5000/property`, {
+            //         method: "POST",
+            //         headers: {
+            //           "Content-Type": "application/json",
+            //           Authorization: `Bearer ${token}`,
+            //         },
+            //       });
+        })
    
         onMount(() => {
 
@@ -110,27 +106,24 @@ token = JSON.parse(token)
                 container: "map",
                 style: 'mapbox://styles/mapbox/streets-v11',
                 center: [16.37, 48.2],
-                // zoom: 12,
+                zoom: 12,
               });
 
               map.on('load', () => {
                 data.forEach((location) => {
-			console.log(location)
-			let marker = new mapboxgl.Marker()
-							.setLngLat(location.coordinates)
-							.addTo(map);
 
-		})
-
-
-   
-    });
+			            let marker = new mapboxgl.Marker()
+                              .setLngLat(location.coordinates)
+                              .addTo(map)
+		        
+                })
+              });
 
             
             
 
               map.addControl(
-                  new mapboxgl.GeolocateControl({
+                new mapboxgl.GeolocateControl({
                   positionOptions: {
                   enableHighAccuracy: true
                   },
@@ -140,7 +133,7 @@ token = JSON.parse(token)
                   showUserHeading: true,
                   trackUserLocation: true
                   })
-        );
+              )
 
       
     
