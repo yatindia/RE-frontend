@@ -217,10 +217,10 @@ const data = [
             <div class="row property">
               <div class="col-md-5 image-box" >
                 
+                    <!-- <img src="/img/imagesr2.jpeg" class="img-fluid"/>
                     <img src="/img/imagesr2.jpeg" class="img-fluid"/>
                     <img src="/img/imagesr2.jpeg" class="img-fluid"/>
-                    <img src="/img/imagesr2.jpeg" class="img-fluid"/>
-                    <img src="/img/imagesr2.jpeg" class="img-fluid"/>
+                    <img src="/img/imagesr2.jpeg" class="img-fluid"/> -->
 
 
                  
@@ -228,12 +228,11 @@ const data = [
               </div>
 
               <div class="col-md-7">
-                <h5> 220-260 S Main St</h5>
-                <small>location</small>
+                <h5> {property.address_1}</h5>
+                <small>{property.state},{property.city}</small>
                 <div class='prop-details'>
-                  <p>{property.year_built}</p>
-                  <p>{property.building_size}</p>
-                  <p>Price</p>
+                  <p>built on {property.year_built}</p>
+                  <p>{property.building_size} Sq Ft</p>
                 </div>
 
 
@@ -322,20 +321,20 @@ const data = [
 
 
         .image-box {
-        // background: url(/img/imagesr2.jpeg) no-repeat;
-        // background-position: center;
-        // background-size: cover;
-      display: flex;
-        margin-top: 12px;
-        height: 110px;
-      width: 180px;
-      overflow: hidden;
-      img {
-        transition: all 0.2s ease-in-out;
-        :hover {
-          transform: translateX(-180px,0);
-        }
-      }
+        background: url(/img/imagesr2.jpeg) no-repeat;
+        background-position: center;
+        background-size: cover;
+      // display: flex;
+      //   margin-top: 12px;
+      //   height: 110px;
+      // width: 180px;
+      // overflow: hidden;
+      // img {
+      //   transition: all 0.2s ease-in-out;
+      //   :hover {
+      //     transform: translateX(-180px,0);
+      //   }
+      // }
       }
 
 

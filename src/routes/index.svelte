@@ -6,11 +6,31 @@
 
 
     let login;
+     let properties;
 
-
-    onMount(()=>{
+    onMount(async ()=>{
 
         login = JSON.parse(localStorage.getItem("login"))
+
+        let search={
+            search:' ',
+            skip:0,
+            limit:6
+          };
+
+        const response = await fetch(`http://127.0.0.1:5000/property/search`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${login}`,
+        },
+       
+      body: JSON.stringify(search),
+
+      });
+      const data = await response.json();
+      properties = data.data[0];
+      console.log(properties);
         
     })
 
@@ -24,126 +44,42 @@
     <div class="container">
       <div class="row">
         <div class="col text-center mb-5">
-           <h1 class="display-4">New and Trending Properties</h1>
-    <p class="lead">Lorem ipsum dolor sit amet at enim hac integer volutpat maecenas pulvinar. </p>
+           <h1 class="display-4">Recent Properties</h1>
+
         </div>
       </div>
     <div class="row">
-   <div class="col-sm-12 col-md-6 col-lg-4 mb-4"><div class="card text-white card-has-bg click-col" style="background-image:url('/post/1.jpg');">
+      {#if properties}
+        {#each properties as property}
+           <div class="col-sm-12 col-md-6 col-lg-4 mb-4"><div class="card text-white card-has-bg click-col" style="background-image:url('/post/1.jpg');">
            <img class="card-img d-none" src="https://source.unsplash.com/600x900/?tech,street" alt="Goverment Lorem Ipsum Sit Amet Consectetur dipisi?">
           <div class="card-img-overlay d-flex flex-column">
            <div class="card-body">
-              <small class="card-meta mb-2">Thought Leadership</small>
+              <small class="card-meta mb-2">{property.space_use}</small>
               <h4 class="card-title mt-0 "><a class="text-white" herf="#">Goverment Lorem Ipsum Sit Amet Consectetur dipisi?</a></h4>
-             <small><i class="far fa-clock"></i> October 15, 2020</small>
+             <small>
+              <!-- <i class="far fa-clock"></i> -->
+               {property.address_1}</small>
             </div>
             <div class="card-footer">
              <div class="media">
-    <img class="mr-3 rounded-circle" src="https://assets.codepen.io/460692/internal/avatars/users/default.png" alt="Generic placeholder image" style="max-width:50px">
+    <!-- <img class="mr-3 rounded-circle" src="https://assets.codepen.io/460692/internal/avatars/users/default.png" alt="Generic placeholder image" style="max-width:50px"> -->
     <div class="media-body">
-      <h6 class="my-0 text-white d-block">Oz Coruhlu</h6>
-       <small>Director of UI/UX</small>
+      <h4>{property.building_size} Sq Ft</h4>
+      <h6 class="my-0 text-white d-block">{property.state}</h6>
+       <small>{property.city} , {property.zip_code}</small>
     </div>
   </div>
             </div>
           </div>
         </div></div>
-       <div class="col-sm-12 col-md-6 col-lg-4 mb-4"><div class="card text-white card-has-bg click-col" style="background-image:url('/post/2.jpg');">
-           <img class="card-img d-none" src="https://source.unsplash.com/600x900/?tree,nature" alt="Goverment Lorem Ipsum Sit Amet Consectetur dipisi?">
-          <div class="card-img-overlay d-flex flex-column">
-           <div class="card-body">
-              <small class="card-meta mb-2">Thought Leadership</small>
-              <h4 class="card-title mt-0 "><a class="text-white" herf="#">Goverment Lorem Ipsum Sit Amet Consectetur dipisi?</a></h4>
-             <small><i class="far fa-clock"></i> October 15, 2020</small>
-            </div>
-            <div class="card-footer">
-             <div class="media">
-    <img class="mr-3 rounded-circle" src="https://assets.codepen.io/460692/internal/avatars/users/default.png" alt="Generic placeholder image" style="max-width:50px">
-    <div class="media-body">
-      <h6 class="my-0 text-white d-block">Oz Coruhlu</h6>
-       <small>Director of UI/UX</small>
-    </div>
-  </div>
-            </div>
-          </div>
-        </div></div>
-    <div class="col-sm-12 col-md-6 col-lg-4 mb-4"><div class="card text-white card-has-bg click-col" style="background-image:url('/post/3.jpg');">
-           <img class="card-img d-none" src="https://source.unsplash.com/600x900/?computer,design" alt="Goverment Lorem Ipsum Sit Amet Consectetur dipisi?">
-          <div class="card-img-overlay d-flex flex-column">
-           <div class="card-body">
-              <small class="card-meta mb-2">Thought Leadership</small>
-              <h4 class="card-title mt-0 "><a class="text-white" herf="#">Goverment Lorem Ipsum Sit Amet Consectetur dipisi?</a></h4>
-             <small><i class="far fa-clock"></i> October 15, 2020</small>
-            </div>
-            <div class="card-footer">
-             <div class="media">
-    <img class="mr-3 rounded-circle" src="https://assets.codepen.io/460692/internal/avatars/users/default.png" alt="Generic placeholder image" style="max-width:50px">
-    <div class="media-body">
-      <h6 class="my-0 text-white d-block">Oz Coruhlu</h6>
-       <small>Director of UI/UX</small>
-    </div>
-  </div>
-            </div>
-          </div>
-        </div></div>
+        {/each}
+      {/if}
+  
+  
+ 
      
-      <div class="col-sm-12 col-md-6 col-lg-4 mb-4"><div class="card text-white card-has-bg click-col" style="background-image:url('/post/4.jpg');">
-           <img class="card-img d-none" src="https://source.unsplash.com/600x900/?tech,street" alt="Goverment Lorem Ipsum Sit Amet Consectetur dipisi?">
-          <div class="card-img-overlay d-flex flex-column">
-           <div class="card-body">
-              <small class="card-meta mb-2">Thought Leadership</small>
-              <h4 class="card-title mt-0 "><a class="text-white" herf="#">Goverment Lorem Ipsum Sit Amet Consectetur dipisi?</a></h4>
-             <small><i class="far fa-clock"></i> October 15, 2020</small>
-            </div>
-            <div class="card-footer">
-             <div class="media">
-    <img class="mr-3 rounded-circle" src="https://assets.codepen.io/460692/internal/avatars/users/default.png" alt="Generic placeholder image" style="max-width:50px">
-    <div class="media-body">
-      <h6 class="my-0 text-white d-block">Oz Coruhlu</h6>
-       <small>Director of UI/UX</small>
-    </div>
-  </div>
-            </div>
-          </div>
-        </div></div>
-       <div class="col-sm-12 col-md-6 col-lg-4 mb-4"><div class="card text-white card-has-bg click-col" style="background-image:url('/post/5.jpg');">
-           <img class="card-img d-none" src="https://source.unsplash.com/600x900/?tree,nature" alt="Goverment Lorem Ipsum Sit Amet Consectetur dipisi?">
-          <div class="card-img-overlay d-flex flex-column">
-           <div class="card-body">
-              <small class="card-meta mb-2">Thought Leadership</small>
-              <h4 class="card-title mt-0 "><a class="text-white" herf="#">Goverment Lorem Ipsum Sit Amet Consectetur dipisi?</a></h4>
-             <small><i class="far fa-clock"></i> October 15, 2020</small>
-            </div>
-            <div class="card-footer">
-             <div class="media">
-    <img class="mr-3 rounded-circle" src="https://assets.codepen.io/460692/internal/avatars/users/default.png" alt="Generic placeholder image" style="max-width:50px">
-    <div class="media-body">
-      <h6 class="my-0 text-white d-block">Oz Coruhlu</h6>
-       <small>Director of UI/UX</small>
-    </div>
-  </div>
-            </div>
-          </div>
-        </div></div>
-    <div class="col-sm-12 col-md-6 col-lg-4 mb-4"><div class="card text-white card-has-bg click-col" style="background-image:url('/post/1.jpg');">
-           <img class="card-img d-none" src="https://source.unsplash.com/600x900/?computer,design" alt="Goverment Lorem Ipsum Sit Amet Consectetur dipisi?">
-          <div class="card-img-overlay d-flex flex-column">
-           <div class="card-body">
-              <small class="card-meta mb-2">Thought Leadership</small>
-              <h4 class="card-title mt-0 "><a class="text-white" herf="#">Goverment Lorem Ipsum Sit Amet Consectetur dipisi?</a></h4>
-             <small><i class="far fa-clock"></i> October 15, 2020</small>
-            </div>
-            <div class="card-footer">
-             <div class="media">
-    <img class="mr-3 rounded-circle" src="https://assets.codepen.io/460692/internal/avatars/users/default.png" alt="Generic placeholder image" style="max-width:50px">
-    <div class="media-body">
-      <h6 class="my-0 text-white d-block">Oz Coruhlu</h6>
-       <small>Director of UI/UX</small>
-    </div>
-  </div>
-            </div>
-          </div>
-        </div></div>
+   
     
   </div>
     
