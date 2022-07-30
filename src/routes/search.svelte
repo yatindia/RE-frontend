@@ -8,7 +8,7 @@
 
 
     
-const data = [
+ [
 	{
 		"location": "Manhattan Ave & Norman Ave at NE corner",
 		"city": "Brooklyn",
@@ -81,8 +81,24 @@ const data = [
 		"state": "New York",
 		"coordinates": [-73.9882730001973,42.818207001246554],
 	}
-]
+] 
+let fetchedCount;
 
+let pagiVal=[];
+let properties
+// let items
+
+// let currentPage = 1
+//   let pageSize = 5
+//   let paginatedItems;
+  let showpropValue;
+
+
+let search={
+            search:' ',
+            skip:0,
+            limit:5
+          };
 
         let token;
         onMount( async ()=>{
@@ -98,23 +114,56 @@ const data = [
             //       });
         })
    
-        onMount(() => {
+        onMount(async () => {
 
+
+          const response = await fetch(`http://127.0.0.1:5000/property/search`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+       
+      body: JSON.stringify(search),
+
+      });
+      const data = await response.json();
+      console.log(data);
+      properties = data.data[0];
+      fetchedCount = data.data[1]
+      for (let i = 0; i < fetchedCount; i++) {
+        if(!(i%5)){
+          pagiVal.push((i))
+        }
+      
+       
+        
+      }
+      console.log(pagiVal);
+      // items =  data.data[0]
+      // console.log(properties); 
+
+      // paginatedItems = paginate({ items, pageSize, currentPage })
           
      
               const map = new mapboxgl.Map({
                 container: "map",
                 style: 'mapbox://styles/mapbox/streets-v11',
                 center: [16.37, 48.2],
-                zoom: 12,
+                // zoom: 12,
               });
 
               map.on('load', () => {
-                data.forEach((location) => {
+               properties.forEach((location , i) => {
 
 			            let marker = new mapboxgl.Marker()
-                              .setLngLat(location.coordinates)
+                              .setLngLat(location.gps)
                               .addTo(map)
+
+                              marker.getElement().addEventListener('click', () => {
+          
+          showpropValue = i+1;
+        });
 		        
                 })
               });
@@ -139,15 +188,12 @@ const data = [
     
         });
 
-        let properties;
 
         const searchProperty = async (e) => {
-          console.log(e);
-          let search={
-            search:e.target.value,
-            skip:0,
-            limit:8
-          };
+          // console.log(e);
+
+          search.search = e.target.value;
+         
           const response = await fetch(`http://127.0.0.1:5000/property/search`, {
         method: "POST",
         headers: {
@@ -160,13 +206,38 @@ const data = [
       });
       const data = await response.json();
       properties = data.data[0];
-      console.log(properties);
+     
         }
-    
-  //       let items = properties
-  // let currentPage = 1
-  // let pageSize = 4
-  // $: paginatedItems = paginate({ items, pageSize, currentPage })
+     
+        const getMoreProperty = async (e) => {
+let i = Number(e)
+i = i -1
+if (e===0) {
+  search.skip = 0;
+  search.limit = 5;
+  
+} else {
+  console.log(fetchedCount);
+  search.skip = e * 5
+  search.limit = fetchedCount - search.skip
+  
+}
+
+          const response = await fetch(`http://127.0.0.1:5000/property/search`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+       
+      body: JSON.stringify(search),
+
+      });
+      const data = await response.json();
+      properties = data.data[0];
+     
+        }
+
 </script>
 <svelte:head>
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.js'></script>
@@ -193,6 +264,16 @@ const data = [
     <option value="2">Two</option>
     <option value="3">Three</option>
   </select>
+  <select class="custom-select p-2 mx-1">
+    <option selected>Floor no</option>
+    <option value="1">One</option>
+    <option value="2">Two</option>
+    <option value="3">Three</option>
+    <option value="4">Four</option>
+    <option value="5">Five</option>
+    <option value="0">Ground floor</option>
+
+  </select>
 </div>
 <!-- class="my-5" -->
 <main>
@@ -208,10 +289,33 @@ const data = [
         <!--Grid column-->
         <div class="col-md-5 mb-4">
           <!--Section: Content-->
+          
+
           <section class="prop-box">
+
+            {#if showpropValue}
+            <div class='ind-property' style="padding: 10px;">
+              <img src="/img/imagesr.jpeg" width="100%">
+              <div class="d-flex justify-content-between px-2 py-4">
+                <div>
+                  <h5> {properties[showpropValue-1].address_1}</h5>
+                  <small>{properties[showpropValue-1].state},{properties[showpropValue-1].city}</small>
+                </div>
+               
+                <div>
+                  <p>From {properties[showpropValue-1].year_built}</p>
+                  <p>{properties[showpropValue-1].building_size} Sq Ft</p>
+                </div>
+              </div>
+             
+            </div>
+            {/if}
+            
+
             {#if properties}
             {#each properties as property }
 
+           
             <!-- Post -->
            <a href="/view/property/{property._id}" style="all:unset">
             <div class="row property">
@@ -231,7 +335,7 @@ const data = [
                 <h5> {property.address_1}</h5>
                 <small>{property.state},{property.city}</small>
                 <div class='prop-details'>
-                  <p>built on {property.year_built}</p>
+                  <p>From {property.year_built}</p>
                   <p>{property.building_size} Sq Ft</p>
                 </div>
 
@@ -247,14 +351,35 @@ const data = [
  
 
           </section>
-          <!-- <LightPaginationNav
-  totalItems="{items.length}"
-  pageSize="{pageSize}"
-  currentPage="{currentPage}"
-  limit="{1}"
-  showStepOptions="{true}"
-  on:setPage="{(e) => currentPage = e.detail.page}"
-/> -->
+          <!-- {#if properties}
+          <LightPaginationNav
+          totalItems="{items.length}"
+          pageSize="{pageSize}"
+          currentPage="{currentPage}"
+          limit="{1}"
+          showStepOptions="{true}"
+          on:setPage="{(e) =>{console.log(e);
+          // getMoreProperty();
+            currentPage = e.detail.page}}"
+        />
+          {/if} -->
+          <div class="container my-3 d-flex justify-content-center">
+            
+            <ul class="pagination pagination">
+              <li class="page-item"><a class="page-link" href="#" aria-label="Previous">&laquo;</a></li>
+              {#if properties}
+              {#each pagiVal as val,i}
+              <li class="page-item"><a class="page-link" on:click={(e)=>{getMoreProperty(e.target.text)}}  href="#">{i+1}</a></li>
+                
+              {/each}
+              {/if}
+              
+             
+              
+              <li class="page-item"><a class="page-link"href="#" aria-label="Next">&raquo;</a></li>
+            </ul>
+          </div>
+          
           <!--Section: Content-->
         </div>
        
@@ -335,6 +460,10 @@ const data = [
       //     transform: translateX(-180px,0);
       //   }
       // }
+      }
+
+      .ind-property {
+        border-bottom: 1px solid grey;
       }
 
 

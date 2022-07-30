@@ -39,7 +39,7 @@
        
         display: grid;
         justify-content: center;
-        width: 60%;
+        width: 80%;
         margin: auto;
         grid-template-columns: 1fr 1fr;
 
@@ -58,7 +58,7 @@
     .hero > .right >img {
         width: 80%;
         display: block;
-        margin: auto;
+        margin: 12% auto;
     }
 
   

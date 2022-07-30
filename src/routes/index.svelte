@@ -51,11 +51,11 @@
     <div class="row">
       {#if properties}
         {#each properties as property}
-           <div class="col-sm-12 col-md-6 col-lg-4 mb-4"><div class="card text-white card-has-bg click-col" style="background-image:url('/post/1.jpg');">
-           <img class="card-img d-none" src="https://source.unsplash.com/600x900/?tech,street" alt="Goverment Lorem Ipsum Sit Amet Consectetur dipisi?">
+           <div class="col-sm-12 col-md-6 col-lg-4 mb-4 rp"><div class="card text-white card-has-bg click-col" style=" background-image:url('/img/immig.jpg');">
+           <img class="card-img d-none" src="https://source.unsplash.com/600x00/?tech,street" alt="Goverment Lorem Ipsum Sit Amet Consectetur dipisi?">
           <div class="card-img-overlay d-flex flex-column">
            <div class="card-body">
-              <small class="card-meta mb-2">{property.space_use}</small>
+              <small class="card-meta">{property.space_use}</small>
               <h4 class="card-title mt-0 "><a class="text-white" herf="#">Goverment Lorem Ipsum Sit Amet Consectetur dipisi?</a></h4>
              <small>
               <!-- <i class="far fa-clock"></i> -->
@@ -75,6 +75,9 @@
         </div></div>
         {/each}
       {/if}
+
+      <!-- google ad -->
+      
   
   
  
@@ -84,9 +87,13 @@
   </div>
     
   </div>
+
   </section>
 
+  <div class='google'>
 
+    <h4>Google Ad</h4>
+  </div>
   <style>
       body {
   /* Created with https://www.css-gradient.com */
@@ -107,6 +114,11 @@
   border-radius: 20px;
   min-height: 450px;
   box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.2);
+}
+.rp {
+  background-image:url('/img/immig.jpg') no-repeat center contain/cover;
+  background-position: center;
+  background-size: contain;
 }
 @media (max-width: 768px) {
   .card {
@@ -174,6 +186,13 @@
   transition: all 800ms cubic-bezier(0.19, 1, 0.22, 1);
   background: #234f6d;
   background: linear-gradient(0deg, rgba(35, 79, 109, 0.3785889356) 0%, #455f71 100%);
+}
+.google {
+  width: 100vw;
+  margin-bottom: 20px;
+  height: 240px;
+  background-color: rgb(170, 187, 240);
+  text-align: center;
 }
   </style>
   

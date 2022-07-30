@@ -32,7 +32,7 @@ await fetch(`${API}/user`, {
 // lastname = ((data.name).split(" "))[1]
 //singleuserproperty/user/:
 
-await fetch(`${API}/property/post/${data._id}`, {
+await fetch(`${API}/property/singleuserproperty/${data._id}`, {
     method: "GET",
     headers: {
         "Content-Type" : "application/json",
