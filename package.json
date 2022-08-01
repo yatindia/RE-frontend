@@ -22,9 +22,13 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sveltevk/qr": "^1.0.0",
+		"axios": "^0.27.2",
 		"check-password-strength": "^2.0.5",
+		"data-uri-to-file": "^0.1.8",
 		"svelte-cubed": "^0.2.1",
 		"svelte-select": "^4.4.7",
+		"svelte-share-buttons-component": "^1.5.0",
 		"sweetalert2": "^11.4.20",
 		"three": "^0.142.0"
 	}

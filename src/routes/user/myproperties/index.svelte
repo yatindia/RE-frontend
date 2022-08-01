@@ -5,13 +5,13 @@
     import {onMount} from "svelte"
     onMount(()=>protectedRoute())
 
-    let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYzk4OGI2ZGYyMWFkN2U2NjU4YTk4NyIsImlhdCI6MTY1ODc3NTIyOH0.m6BRBK3USfTGeny6o4gIiRQGNpdCOIAJPb8rS89hizQ';
+    let token;
     let data = {}
     let properties=[]
 
     onMount(async ()=>{
 
-// token = JSON.parse(localStorage.getItem("login"))
+token = JSON.parse(localStorage.getItem("login"))
 
 await fetch(`${API}/user`, {
     method: "POST",
@@ -47,7 +47,6 @@ await fetch(`${API}/property/singleuserproperty/${data._id}`, {
 
     if (res.status) {
         properties = res.data
-        console.log(properties);
     }
 })
 
@@ -68,7 +67,7 @@ console.log(properties);
                 <h5>{property.address_1}.</h5>
                 <h5>{property.for} , <small style="font-size: 15px;">{property.city}</small> </h5>
                 <div class="btnbox">
-                    <button class="btn btn-info w-70 mt-2 update">View</button>
+                    <a href={`/user/myproperties/update/${property._id}`} class="btn btn-info w-70 mt-2 update">Update</a>
                     <button class="btn btn-danger w-70 mt-2 delete">Delete</button>
                 </div>
              </div>
