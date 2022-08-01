@@ -1,145 +1,135 @@
 <script>
-      import {API} from "../../../config"
+    import {API} from "../../../config"
     import {protectedRoute} from "../../../components/functions"
-    
     import {onMount} from "svelte"
+
     onMount(()=>protectedRoute())
+    onMount(async ()=>getData())
 
     let token;
     let data = {}
-    let properties=[]
+    let properties= false
 
-    onMount(async ()=>{
-
-token = JSON.parse(localStorage.getItem("login"))
-
-await fetch(`${API}/user`, {
-    method: "POST",
-    headers: {
-        "Content-Type" : "application/json",
-        "Authorization": `<Bearer> ${token}`
-    }
-})
-.then(res => res.json())
-.then((res)=>{
-    if (res.status) {
-        data = res.data
-        console.log(data);
-    }
-})
-
-// firstname = ((data.name).split(" "))[0]
-// lastname = ((data.name).split(" "))[1]
-//singleuserproperty/user/:
-
-await fetch(`${API}/property/singleuserproperty/${data._id}`, {
-    method: "GET",
-    headers: {
-        "Content-Type" : "application/json",
-        "Authorization": `<Bearer> ${token}`
-    }
     
-   
-})
-.then(res => res.json())
-.then((res)=>{
-    console.log(res);
 
-    if (res.status) {
-        properties = res.data
-    }
-})
+async function getData(){
+    token = JSON.parse(localStorage.getItem("login"))
+
+        await fetch(`${API}/user`, {
+            method: "POST",
+            headers: {
+                "Content-Type" : "application/json",
+                "Authorization": `<Bearer> ${token}`
+            }
+        })
+        .then(res => res.json())
+        .then((res)=>{
+            if (res.status) {
+                data = res.data
+            }
+        })
+
+        await fetch(`${API}/property/singleuserproperty/${data._id}`, {
+            method: "GET",
+            headers: {
+                "Content-Type" : "application/json",
+                "Authorization": `<Bearer> ${token}`
+            }
+            
+        
+        })
+        .then(res => res.json())
+        .then((res)=>{
+
+            if (res.status) {
+                properties = res.data
+
+                console.log(res.data);
+            }
+        })
+}
 
 
-})
-console.log(properties);
+
+async function deletePost(_id) {
+
+    await fetch(`${API}/property/${_id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type" : "application/json",
+                "Authorization": `<Bearer> ${token}`
+            }
+            
+        
+        })
+        .then(res => res.json())
+        .then((res)=>{
+            getData()
+        })
+    
+}
+
+
+
+
+
+
 </script>
 
 <div>
-    <div class="containerr bg-light">
-        {#if properties}
+    <div class="containerr">
+        {#if properties && (properties).length > 0 }
             {#each properties as property}
-            <div class="property">
-                <img src="/img/indexi.jpeg" class="img-fluid" alt="">
-             <div class="prop-details py-2">
-                <h3>{property.space_use}</h3>
-                <p>This property has lot of features that clients like to think that this property has all the features.</p>
-                <h5>{property.address_1}.</h5>
-                <h5>{property.for} , <small style="font-size: 15px;">{property.city}</small> </h5>
-                <div class="btnbox">
-                    <a href={`/user/myproperties/update/${property._id}`} class="btn btn-info w-70 mt-2 update">Update</a>
-                    <button class="btn btn-danger w-70 mt-2 delete">Delete</button>
+                <div class="property">
+
+                    {#if  property.photos && (property.photos).length > 0}
+                        <img width="300px" src={`${API}/image/${property.photos[0]}`} class="img-fluid" alt="">
+                    {:else}
+                    <img width="300px" src="/img/placeholder.png" alt="">
+                    {/if}
+
+                    <div class="prop-details py-2">
+                        <h3>{property.title}</h3>
+                        <p>{property.address_1} | {property.address_2}</p>
+                        <h5>For: {(property.for).toUpperCase()} | {property.city} </h5>
+                        <div class="btnbox">
+                            <a href={`/user/myproperties/update/${property._id}`} class="btn btn-outline-danger w-70 mt-2 update">Update</a>
+                            <button on:click={()=>{deletePost(property._id)}} class="btn btn-danger w-70 mt-2 delete">Delete</button>
+                        </div>
+                    </div>
                 </div>
-             </div>
-          </div>
             {/each}
-        {/if}
-        
-      <!-- <div class="property">
-        <img src="/img/indexi.jpeg" class="img-fluid" alt="">
-        <div class="prop-details">
-           <h3>Tittle</h3>
-           <h5>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi alias facnatus non fugiat.</h5>
-           <h5>buyingOption <small>location </small> </h5>
-           <div class="btnbox">
-               <button class="btn btn-info w-70 mt-2 update">Update</button>
-               <button class="btn btn-danger w-70 mt-2 delete">Delete</button>
-           </div>
-        </div>
-     </div> -->
-     <!-- <div class="property">
-        <img src="/img/indexi.jpeg" class="img-fluid" alt="">
-        <div class="prop-details">
-           <h3>Tittle</h3>
-           <h5>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi alias facnatus non fugiat.</h5>
-           <h5>buyingOption <small>location </small> </h5>
-           <div class="btnbox">
-               <button class="btn btn-info w-70 mt-2 update">Update</button>
-               <button class="btn btn-danger w-70 mt-2 delete">Delete</button>
-           </div>
-        </div>
-     </div> -->
-     <!-- <div class="property">
-        <img src="/img/indexi.jpeg" class="img-fluid" alt="">
-        <div class="prop-details">
-           <h3>Tittle</h3>
-           <h5>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi alias facnatus non fugiat.</h5>
-           <h5>buyingOption <small>location </small> </h5>
-           <div class="btnbox">
-               <button class="btn btn-info w-70 mt-2 update">Update</button>
-               <button class="btn btn-danger w-70 mt-2 delete">Delete</button>
-           </div>
-        </div>
-     </div> -->
-     <!-- <div class="property">
-         <img src="/img/indexi.jpeg" class="img-fluid" alt="">
-         <div class="prop-details">
-            <h3>Tittle</h3>
-            <h5>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi alias facnatus non fugiat.</h5>
-            <h5>buyingOption <small>location </small> </h5>
-            <div class="btnbox">
-                <button class="btn btn-info w-70 mt-2 update">Update</button>
-                <button class="btn btn-danger w-70 mt-2 delete">Delete</button>
+        {:else}
+            <div class="empty">
+                <img  src="/img/empty.gif" alt="">
+                <a href="/user/post" class="btn btn-danger">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                    </svg> 
+                Add Properties
+                </a>
             </div>
-         </div>
-      </div> -->
-       
-          
+        {/if}
     </div>
 </div>
 
 <style lang="scss">
+
+.empty{
+       min-height: 40vh;
+       width: 100%;
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       flex-direction: column;
+   }
+
     .containerr {
     width: 80%;
     margin: 3% auto;
-    height: 500px;
     padding: 32px 0;
-    // display: flex;
-    // flex-direction: column;
-    // justify-content: space-around;
-    overflow: scroll;
     border-radius: 12px;
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    // box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
     .property {
         background-color: #fff;
         border: 1px solid rgb(190, 186, 186);

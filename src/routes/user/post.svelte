@@ -4,13 +4,15 @@
   import Property from "../../util/Data/Property";
   import ImageUpload from "../../components/ImageUpload.svelte";
   import axios from "axios"
-
-
+  import Countries from "../../util/Data/Countries"
+  import States from "../../util/Data/States"
+  import mapboxgl from "mapbox-gl";
   import { onMount } from "svelte";
+
   onMount(() => protectedRoute());
 
-  import mapboxgl from "mapbox-gl";
-import Login from "../auth/login.svelte";
+  
+
   mapboxgl.accessToken = 'pk.eyJ1Ijoic2F0aHlhZGV2IiwiYSI6ImNsM3R5bGh1cjBlZ2wzaXBjazI2ZTBnMm8ifQ.GLQgbjT3w49JfCTJ_iEsQA'
 
 
@@ -69,45 +71,62 @@ import Login from "../auth/login.svelte";
       async function submit() {
 
         let token = JSON.parse(localStorage.getItem("login"))
-        let result = []
+        
 
      
-        if ( data.photos && (data.photos).length == 0) {
-          alert("Please upload atleast 1 image")
+        if ( (data.photos).length == 0) {
+          alert("Please upload, atleast 1 image")
           return false;
         }
-        if ( (data.photos).find((e)=>{ return e=="" })  == "") {
-          alert("Please upload atleast 1 image")
-          return false;
-        }
-
-        console.log((data.photos).find((e)=>{ return e=="" }) == "");
-        if ( !data.floors) {
-          alert("Please add atleast 1 floor")
-          return false;
-        }
+        // if ( (data.photos).find((e)=>{ return e== "" })  == "") {
+        //   alert("Please upload atleast 1 image")
+        //   return false;
+        // }
 
     
-          data.photos.forEach( async (image) => {
 
-          let img = new FormData
-          img.append("image", image)
-
-          await axios({
-            method: "post",
-            url : `${API}/property/imageupload`,
-            headers: {"Authorization": `<Bearer> ${token}`},
-            data: {image}
-          })
-          .then(res => {
-            if (res.data.status) {
-              result = [...result, res.data.data]
-            }
-          })
-          });
+        let p = new Promise(async (resolve, reject)=>{
+            let result = []
 
 
-          await fetch(`${API}/property/create`, {
+            for (let index = 0; index < (data.photos).length; ++index) {
+                    const image = (data.photos)[index];
+                    let img = new FormData
+              img.append("image", image)
+
+              await axios({
+                method: "post",
+                url : `${API}/property/imageupload`,
+                headers: {"Authorization": `<Bearer> ${token}`},
+                data: {image}
+              })
+              .then(res => {
+                if (res.data.status) {
+                  result = [...result, res.data.data]
+                  console.log(res);
+                  
+                }
+              })
+              }
+
+
+
+
+        
+
+            resolve(result)
+
+        })
+
+        p.then(async (result)=>{
+
+          
+
+          if (result.length == 0) {
+            alert("Please upload atleast 1 image")
+          return false;
+          }else {
+            await fetch(`${API}/property/create`, {
             method:"POST", headers: {
               "Content-Type" : "application/json",
               "Authorization": `<Bearer> ${token}`
@@ -117,11 +136,24 @@ import Login from "../auth/login.svelte";
             .then(res => {
               if (res.status) {
                 alert("Success")
-                window.location.reload()
+                // window.location.href = "/user/myproperties"
+                
               }else {
                 alert(res.message)
               }
             })
+          }
+
+        })
+    
+         
+
+       
+
+          
+
+
+          
         
         
         
@@ -135,21 +167,23 @@ import Login from "../auth/login.svelte";
   <h1 class="text-center mt-5">ADD PROPERTY</h1>
   <form on:submit|preventDefault={()=>{submit()}}>
     <div class="img">
-      <div class="container row img-container">
+     {#if (data.photos).length > 0}
+     <div class="container row img-container">
         
-        {#each data.photos as photo, i}
-          <span class="img-span">
-            <ImageUpload 
-            on:delete={
-            ({detail})=>{ 
-              (data.photos).splice(i,1)
-              data.photos = data.photos
-              }} 
-              order={i} bind:avatar={photo} />
-          </span>
-        {/each}
-        
-      </div>
+      {#each data.photos as photo, i}
+        <span class="img-span">
+          <ImageUpload 
+          on:delete={
+          ({detail})=>{ 
+            (data.photos).splice(i,1)
+            data.photos = data.photos
+            }} 
+            order={i} bind:avatar={photo} />
+        </span>
+      {/each}
+      
+    </div>
+     {/if}
    {#if (data.photos).length < 10}
    <div class="container img-btn">
     <button on:click={()=>{data.photos = [...data.photos, ""]}} type="button" style="width: 200px ;" class="btn btn-danger">Add Image ({(data.photos).length}/10)</button>
@@ -163,7 +197,7 @@ import Login from "../auth/login.svelte";
         <div class="col-sm-4">
           <label for="#">Property Title</label>
           <div class="form-group">
-            <input bind:value={data.title} class="form-control" type="text" placeholder="Title">
+            <input required bind:value={data.title} class="form-control" type="text" placeholder="Title">
           </div>
         </div>
 
@@ -203,14 +237,14 @@ import Login from "../auth/login.svelte";
         <div class="col-sm-4">
           <label for="#">Address 1</label>
           <div class="form-group">
-            <input bind:value={data.address_1} class="form-control" type="text" placeholder="Address 1">
+            <input required bind:value={data.address_1} class="form-control" type="text" placeholder="Address 1">
           </div>
         </div>
      
         <div class="col-sm-4">
           <label for="#">Address 2</label>
           <div class="form-group">
-            <input bind:value={data.address_2} class="form-control" type="text" placeholder="Address 2">
+            <input required bind:value={data.address_2} class="form-control" type="text" placeholder="Address 2">
           </div>
         </div>
       </div>
@@ -220,36 +254,38 @@ import Login from "../auth/login.svelte";
     <div class="container">
       <div class="row">
 
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-3">
+        <div class="col-6 col-sm-6 col-lg-6 col-xl-3 mt-5">
           <label for="#">Country</label>
           <select bind:value={data.country}  class="form-control">
-            <option value="building">Building</option>
-            <option value="condo">Condo</option>
+            <option value="">Select Country</option>
+            {#each Countries as Country}
+            <option value="{Country}">{Country}</option>
+            {/each}
           </select>
         </div>
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-3">
+        <div class="col-6 col-sm-6 col-lg-6 col-xl-3 mt-5">
           <label for="#">State</label>
-          <select bind:value={data.state} class="form-control">
-            <option value="office"> Office </option>
-            <option value="personal"> Personal </option>
-            <option value="warehouse"> Warehouse </option>
-            <option value="medical"> Medical </option>
-            <option value="academic"> Academic </option>
-            <option value="others"> Others </option>
+          <select  bind:value={data.state} class="form-control">
+            {#if data.country != ""}
+            {#each States[data.country] as State}
+            <option value="{State}">{State}</option>
+            {/each}
+            {/if}
+           
           </select>
         </div>
 
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-3">
+        <div class="col-6 col-sm-6 col-lg-6 col-xl-3 mt-5">
           <label for="#">City</label>
           <div class="form-group">
-            <input bind:value={data.city} class="form-control" type="text" placeholder="City">
+            <input required bind:value={data.city} class="form-control" type="text" placeholder="City">
           </div>
         </div>
 
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-3">
+        <div class="col-6 col-sm-6 col-lg-6 col-xl-3 mt-5">
           <label for="#">Zip Code</label>
           <div class="form-group">
-            <input class="form-control" type="text" placeholder="ZIP Code">
+            <input required class="form-control" type="text" placeholder="ZIP Code">
           </div>
         </div>
 
@@ -264,14 +300,14 @@ import Login from "../auth/login.svelte";
         <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
           <label for="#">Zoning</label>
           <div class="form-group">
-            <input bind:value={data.zoning} class="form-control" type="text" placeholder="Zoning">
+            <input required bind:value={data.zoning} class="form-control" type="text" placeholder="Zoning">
           </div>
         </div>
 
         <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
           <label for="#">Year Build</label>
           <div class="form-group">
-            <input bind:value={data.year_built} class="form-control" type="text" placeholder="Year built">
+            <input required bind:value={data.year_built} class="form-control" type="text" placeholder="Year built">
           </div>
         </div>
 
@@ -293,7 +329,7 @@ import Login from "../auth/login.svelte";
         <div  class="col-6 col-sm-6 col-lg-6 col-xl-6">
           <label for="#">Year Renovated</label>
           <div class="form-group">
-            <input disabled={!data.renovated} bind:value={data.renovated_year} class="form-control" type="text" placeholder="Renovated Year">
+            <input required disabled={!data.renovated} bind:value={data.renovated_year} class="form-control" type="text" placeholder="Renovated Year">
           </div>
         </div>
 
@@ -311,7 +347,7 @@ import Login from "../auth/login.svelte";
 
         <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
           <label for="#">Lot Size (SF)</label>
-          <input bind:value={data.lot_size} class="form-control" type="text" placeholder="Lot Size">
+          <input required bind:value={data.lot_size} class="form-control" type="text" placeholder="Lot Size">
         </div>
 
       </div>
@@ -321,7 +357,7 @@ import Login from "../auth/login.svelte";
     <div class="container">
       <div class="row">
 
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-3">
+        <div class="col-6 col-sm-6 col-lg-6 col-xl-3 mt-5">
           <label for="#">Construction Type</label>
           <select bind:value={data.construction_type} class="form-control">
             <option value="metal">Metal</option>
@@ -330,7 +366,7 @@ import Login from "../auth/login.svelte";
           </select>
         </div>
 
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-3">
+        <div class="col-6 col-sm-6 col-lg-6 col-xl-3 mt-5">
           <label for="#">Sewer</label>
           <select bind:value={data.sewer} class="form-control">
             <option value="city">City</option>
@@ -338,7 +374,7 @@ import Login from "../auth/login.svelte";
           </select>
         </div>
 
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-3">
+        <div class="col-6 col-sm-6 col-lg-6 col-xl-3 mt-5">
           <label for="#">Electricity</label>
           <select bind:value={data.electricity} class="form-control">
             <option value="commercial">Commerical</option>
@@ -347,9 +383,9 @@ import Login from "../auth/login.svelte";
           </select>
         </div>
 
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-3">
+        <div class="col-6 col-sm-6 col-lg-6 col-xl-3 mt-5">
           <label for="#">Youtube Video Link</label>
-          <input bind:value={data.video} class="form-control" type="text" placeholder="Enter Youtube Video Link">
+          <input required bind:value={data.video} class="form-control" type="text" placeholder="Enter Youtube Video Link">
          </div>
 
 
@@ -382,11 +418,11 @@ import Login from "../auth/login.svelte";
       </ul>
     </div>
 
-    <div class="container">
+    <div class="container highlights pt-2 pb-2">
 
      <div class="row">
        <div class="col-sm-10">
-        <input bind:value={highlights} class="form-control" type="text" placeholder="Enter Highlights">
+        <input bind:value={highlights} class="form-control m-0" type="text" placeholder="Enter Highlights">
        </div>
       
       <button 
@@ -398,8 +434,12 @@ import Login from "../auth/login.svelte";
           highlights = ""
         }}
         type="button" 
-        class="col-sm-2 btn btn-primary mt-2 ">
-        Add highlights
+        class="col-sm-2 btn btn-outline-danger">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill"         
+              viewBox="0 0 16 16">
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+        </svg> 
+        Highlights
       </button>
      </div>
 
@@ -540,15 +580,6 @@ import Login from "../auth/login.svelte";
 
 
 
-
-
-
-
-
-
-
-
-
   <div class="container">
     <div class="col-12" id="map"></div>
   </div>
@@ -564,6 +595,10 @@ import Login from "../auth/login.svelte";
 
 
 <style lang="scss">
+
+  .highlights {
+    padding: 50px auto;
+  }
 
   .amenities {
     display: grid;
@@ -603,7 +638,7 @@ import Login from "../auth/login.svelte";
 
     .img-container{
       display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     flex-direction: row;
     flex-wrap: wrap;
@@ -626,4 +661,11 @@ import Login from "../auth/login.svelte";
 
         
       }
+  .container {
+    background-color: rgb(255, 250, 255);
+    padding-top: 2%;
+    padding-bottom: 2%;
+    border-radius: 5px;
+    box-shadow: 5px 5px 5px rgba(11, 0, 132, 0.07);
+  }
 </style>

@@ -57,3 +57,13 @@
 
 
 <Footer/>
+
+
+<style>
+    :global(h1){font-family: 'Poppins', sans-serif; font-weight: bold;}
+    :global(h2){font-family: 'Poppins', sans-serif; font-weight: bold;}
+    :global(h3){font-family: 'Poppins', sans-serif; font-weight: bold;}
+    :global(h4){font-family: 'Poppins', sans-serif; font-weight: bold;}
+    :global(h5){font-family: 'Poppins', sans-serif; font-weight: bold;}
+    :global(h6){font-family: 'Poppins', sans-serif; font-weight: bold;}
+</style>

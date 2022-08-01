@@ -189,6 +189,7 @@ let search={
         });
 
 
+        let searchValue
         const searchProperty = async (e) => {
           // console.log(e);
 
@@ -239,12 +240,14 @@ if (e===0) {
         }
 
 </script>
+
 <svelte:head>
-  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css' rel='stylesheet' />
+  <link rel="icon" href="/img/favicon.png" />
+  <title>Search - {searchValue?searchValue:"Property"}</title>
 </svelte:head>
+
 <div class='containe my-2'>
-  <input type="text" class="px-4 mx-2 p-2 geocoder" id="geocoder" placeholder="Search..." on:change={searchProperty}>
+  <input type="text" class="px-4 mx-2 p-2 geocoder" id="geocoder" placeholder="Search..." on:change={searchProperty} bind:value={searchValue}>
 
   <select class="custom-select p-2 mx-1">
     <option selected>Lease</option>
@@ -280,7 +283,7 @@ if (e===0) {
     <div class="containerr">
       <!--Grid row-->
       <div class="row">
-        <div class="col-md-7 mb-4 bg-light map position-sticky" id="map">
+        <div class="col-sm-7 mb-4 bg-light map position-sticky" id="map">
           <!-- <div class="text">Google Ad</div> -->
         
 
@@ -295,6 +298,7 @@ if (e===0) {
 
             {#if showpropValue}
             <div class='ind-property' style="padding: 10px;">
+              <!-- svelte-ignore a11y-missing-attribute -->
               <img src="/img/imagesr.jpeg" width="100%">
               <div class="d-flex justify-content-between px-2 py-4">
                 <div>
@@ -319,7 +323,7 @@ if (e===0) {
             <!-- Post -->
            <a href="/view/property/{property._id}" style="all:unset">
             <div class="row property">
-              <div class="col-md-5 image-box" >
+              <div class="col-md-5 mb-2 image-box" style="width:100%;aspect-ratio:1/1;" >
                 
                     <!-- <img src="/img/imagesr2.jpeg" class="img-fluid"/>
                     <img src="/img/imagesr2.jpeg" class="img-fluid"/>
@@ -331,7 +335,7 @@ if (e===0) {
                 
               </div>
 
-              <div class="col-md-7">
+              <div class="col-sm-7">
                 <h5> {property.address_1}</h5>
                 <small>{property.state},{property.city}</small>
                 <div class='prop-details'>

@@ -7,6 +7,7 @@
 
 	
 
+    export let _id = false
     let user = {}
     let qrcode;
     $: url = `${Client}/view/${user._id}`;
@@ -14,10 +15,29 @@
 	$: desc = 'User Commercial Listing Pro is not only a listing website for properties but also a new hub for Real Estate Developers and Realtors';
     
     onMount(async ()=>{
+        let login = JSON.parse(localStorage.getItem("login"))
 
+        if (_id) {
+
+            await fetch(`http://127.0.0.1:5000/user/`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${login}`
+            },
+            body: JSON.stringify({_id})
+            })
+            .then(res => res.json())
+            .then(res => {
+
+                if (res.status) {
+                    user = res.data
+                    
+                    }
+            })
             
-
-            let login = JSON.parse(localStorage.getItem("login"))
+        }else {
+            
 
             await fetch(`http://127.0.0.1:5000/user/`, {
             method: "POST",
@@ -31,6 +51,10 @@
                     
                     }
             })
+        }
+            
+
+            
 
            
             	
