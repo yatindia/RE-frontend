@@ -22,6 +22,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sveltejs/adapter-node": "^1.0.0-next.85",
 		"@sveltevk/qr": "^1.0.0",
 		"axios": "^0.27.2",
 		"check-password-strength": "^2.0.5",
