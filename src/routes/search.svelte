@@ -2,7 +2,7 @@
     // import {fade} from "svelte/transition"
     import { onMount } from 'svelte'
     import { paginate, LightPaginationNav } from 'svelte-paginate'
-
+    import {API} from "../config"
     import mapboxgl from "mapbox-gl";
     mapboxgl.accessToken = 'pk.eyJ1Ijoic2F0aHlhZGV2IiwiYSI6ImNsM3R5bGh1cjBlZ2wzaXBjazI2ZTBnMm8ifQ.GLQgbjT3w49JfCTJ_iEsQA';
 
@@ -323,7 +323,7 @@ if (e===0) {
             <!-- Post -->
            <a href="/view/property/{property._id}" style="all:unset">
             <div class="row property">
-              <div class="col-md-5 mb-2 image-box" style="width:100%;aspect-ratio:1/1;" >
+              <div class="col-md-5 mb-2 image-box"  style={`width:100%;aspect-ratio:1/1;background-image: url(${API}/image/${property.photos[0]});`} >
                 
                     <!-- <img src="/img/imagesr2.jpeg" class="img-fluid"/>
                     <img src="/img/imagesr2.jpeg" class="img-fluid"/>
@@ -450,7 +450,7 @@ if (e===0) {
 
 
         .image-box {
-        background: url(/img/imagesr2.jpeg) no-repeat;
+        background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
       // display: flex;
