@@ -1,5 +1,7 @@
 <script>
     import Hero from "../util/Hero/Hero.svelte"
+    import {API} from "../config"
+
 
 
     import {onMount} from "svelte"
@@ -18,7 +20,7 @@
             limit:6
           };
 
-        const response = await fetch(`http://127.0.0.1:5000/property/search`, {
+        const response = await fetch(`${API}/property/search`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,12 +53,12 @@
     <div class="row">
       {#if properties}
         {#each properties as property}
-           <div class="col-sm-12 col-md-6 col-lg-4 mb-4 rp"><div class="card text-white card-has-bg click-col" style=" background-image:url('/img/immig.jpg');">
+           <div class="col-sm-12 col-md-6 col-lg-4 mb-4 rp"><div class="card text-white card-has-bg click-col" style={`background-image:url(${API}/image/${property.photos[0]});`}>
            <img class="card-img d-none" src="https://source.unsplash.com/600x00/?tech,street" alt="Goverment Lorem Ipsum Sit Amet Consectetur dipisi?">
           <div class="card-img-overlay d-flex flex-column">
            <div class="card-body">
               <small class="card-meta">{property.space_use}</small>
-              <h4 class="card-title mt-0 "><a class="text-white" herf="#">Goverment Lorem Ipsum Sit Amet Consectetur dipisi?</a></h4>
+              <h4 class="card-title mt-0 "><a class="text-white" herf="#">{property.title}</a></h4>
              <small>
               <!-- <i class="far fa-clock"></i> -->
                {property.address_1}</small>
@@ -92,7 +94,7 @@
 
   <div class='google'>
 
-    <h4>Google Ad</h4>
+    <h4 class='pt-4'>Google Ad</h4>
   </div>
   <style>
       body {

@@ -131,14 +131,14 @@ let search={
       console.log(data);
       properties = data.data[0];
       fetchedCount = data.data[1]
-      for (let i = 0; i < fetchedCount; i++) {
+      if(fetchedCount > 0) {
+        for (let i = 0; i < fetchedCount; i++) {
         if(!(i%5)){
           pagiVal.push((i))
         }
-      
-       
-        
       }
+      }
+    
       console.log(pagiVal);
       // items =  data.data[0]
       // console.log(properties); 
@@ -211,15 +211,17 @@ let search={
         }
      
         const getMoreProperty = async (e) => {
+          
+          console.log(e);
 let i = Number(e)
 i = i -1
-if (e===0) {
+if (i===0) {
   search.skip = 0;
   search.limit = 5;
   
 } else {
   console.log(fetchedCount);
-  search.skip = e * 5
+  search.skip = i * 5
   search.limit = fetchedCount - search.skip
   
 }
@@ -370,7 +372,7 @@ if (e===0) {
           <div class="container my-3 d-flex justify-content-center">
             
             <ul class="pagination pagination">
-              <li class="page-item"><a class="page-link" href="#" aria-label="Previous">&laquo;</a></li>
+              <li class="page-item"><a class="page-link" href="#" aria-label="Previous" name="previous">&laquo;</a></li>
               {#if properties}
               {#each pagiVal as val,i}
               <li class="page-item"><a class="page-link" on:click={(e)=>{getMoreProperty(e.target.text)}}  href="#">{i+1}</a></li>
@@ -380,7 +382,7 @@ if (e===0) {
               
              
               
-              <li class="page-item"><a class="page-link"href="#" aria-label="Next">&raquo;</a></li>
+              <li class="page-item"><a class="page-link"href="#" aria-label="Next" name="next">&raquo;</a></li>
             </ul>
           </div>
           
