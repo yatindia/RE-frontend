@@ -162,6 +162,10 @@
       }
 
 </script>
+<svelte:head>
+  <link rel="icon" href="/img/favicon.png" />
+  <title>New Property</title>
+</svelte:head>
 
 <div >
   <h1 class="text-center mt-5">ADD PROPERTY</h1>
@@ -285,7 +289,7 @@
         <div class="col-6 col-sm-6 col-lg-6 col-xl-3 mt-5">
           <label for="#">Zip Code</label>
           <div class="form-group">
-            <input required class="form-control" type="text" placeholder="ZIP Code">
+            <input required bind:value={data.zip_code} class="form-control" type="text" placeholder="ZIP Code">
           </div>
         </div>
 

@@ -65,7 +65,10 @@ const sendNumber = async (e) => {
 </script>
 <svelte:window on:resize={()=>console.log(body)} bind:innerWidth={body} />
 
-
+    <svelte:head>
+        <link rel="icon" href="/img/favicon.png" />
+        <title>Settings</title>
+      </svelte:head>
 
 <div class="containerr bg-lite">
     <div class="userdetails">

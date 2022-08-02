@@ -7,6 +7,8 @@
 	let dispatch = createEventDispatcher()
 	
 	const onFileSelected =(e)=>{
+
+		
     let image = e.target.files[0];
             let reader = new FileReader();
             reader.readAsDataURL(image);

@@ -93,6 +93,10 @@
 
 
 </script>
+<svelte:head>
+  <link rel="icon" href="/img/favicon.png" />
+  <title>Sign Up</title>
+</svelte:head>
 
 <section class="signup">
 

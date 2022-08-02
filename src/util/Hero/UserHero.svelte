@@ -10,8 +10,8 @@
     export let _id = false
     let user = {}
     let qrcode;
-    $: url = `${Client}/view/${user._id}`;
-	$: title = `Hi, I'am ${user.name? user.name: "Commercial Listing Pro User"}`;
+    $: url = `${Client}/view/user/${user._id}`;
+	$: title = `Hi, I'am ${user.name? user.name: "Commercial Listing Pro User"}. Now avaliable on Commercial Listing Pro `;
 	$: desc = 'User Commercial Listing Pro is not only a listing website for properties but also a new hub for Real Estate Developers and Realtors';
     
     onMount(async ()=>{
@@ -19,7 +19,7 @@
 
         if (_id) {
 
-            await fetch(`http://127.0.0.1:5000/user/`, {
+            await fetch(`${API}/user/`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -39,7 +39,7 @@
         }else {
             
 
-            await fetch(`http://127.0.0.1:5000/user/`, {
+            await fetch(`${API}/user/`, {
             method: "POST",
             headers: {Authorization: `Bearer ${login}`}
             })
@@ -161,9 +161,6 @@
             .btn {
                 margin-top: 10px;
             }
-        }
-        .data {
-
         }
     }
 </style>

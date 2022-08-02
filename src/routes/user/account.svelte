@@ -77,6 +77,11 @@ await fetch(`${API}/property/${_id}`, {
     
 </script>
 
+<svelte:head>
+  <link rel="icon" href="/img/favicon.png" />
+  <title>My Acccount</title>
+</svelte:head>
+
 
 <div>
 

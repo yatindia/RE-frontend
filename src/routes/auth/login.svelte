@@ -120,6 +120,11 @@
    
 </script>
 
+<svelte:head>
+  <link rel="icon" href="/img/favicon.png" />
+  <title>Login</title>
+</svelte:head>
+
 <section class="signup">
 
     <form on:submit|preventDefault={()=>submit()} in:slide>

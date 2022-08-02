@@ -17,6 +17,11 @@
     $:email = email.searchParams.get("email") || '';
 </script>
 
+<svelte:head>
+  <link rel="icon" href="/img/favicon.png" />
+  <title>Password Recovery</title>
+</svelte:head>
+
 <section class="signup">
 
     <form>
