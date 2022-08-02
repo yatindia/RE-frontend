@@ -11,7 +11,7 @@
  
  <section class="searchBox">
  
-     <form>
+     <!-- <form>
  
  
         <div class="form-group mt-2">
@@ -56,9 +56,9 @@
         </div>
  
         
-     </form>
+     </form> -->
      <a href="/search">
-        <button type="submit" class="btn r w-100 mt-4"><i class="fa-solid fa-magnifying-glass"></i> SEARCH</button>
+        <button type="submit" class="btn r w-100 mt-2">SEARCH PROPERTY <i class="fa-solid fa-magnifying-glass"></i></button>
     </a>
 
      
@@ -71,11 +71,11 @@
      .searchBox {
          min-height: 20vh;
          display: flex;
-         justify-content: center;
+         /* justify-content: center;
          align-items: center;
-         flex-direction: column;
+         flex-direction: column; */
          
-         padding-right: 10%;
+         /* padding-right: 10%; */
      }
 
      .btn {
@@ -83,6 +83,7 @@
          color: #fff;
          font-weight: bold;
          box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.173);
+         padding: 12px 25px;
      }
  
  

@@ -37,7 +37,7 @@
 		<img class="upload" 
 		src="/img/upload.png" alt="" 
 		on:click={()=>{fileinput.click();}} />
-        <input style="display:none" type="file" accept=" .png" on:change={(e)=>onFileSelected(e)} bind:this={fileinput} >
+        <input style="display:none" type="file" accept=" .jpeg" on:change={(e)=>onFileSelected(e)} bind:this={fileinput} >
 </div>
 <style lang="scss"> 
 	#up{

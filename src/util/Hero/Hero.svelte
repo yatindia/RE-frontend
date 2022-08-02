@@ -13,8 +13,8 @@
 
         <div class="left">
 
-            <h1>Lullamcorper eget lobortis scelerisque</h1>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magnam eum odit, porro beatae dolorem praesentium quae numquam fugiat fuga illum earum quidem obcaecati..
+            <h1 class='mb-4'>Get the best Commercial property deals</h1>
+            <p>It's so simple to find the best real estate deals in your area with monthly like other sites out there. This ensures that we offer prospective buyers and investors with the freshest, hottest deals on the Internet. 
 
             </p>
 
@@ -49,6 +49,10 @@
 
     .hero > .left {
         padding-top: 5vh;
+        margin-top: 12vh;
+        p{
+            width: 80%;
+        }
     }
 
     .hero > .right {

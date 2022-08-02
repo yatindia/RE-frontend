@@ -247,27 +247,27 @@ if (e===0) {
 </svelte:head>
 
 <div class='containe my-2'>
-  <input type="text" class="px-4 mx-2 p-2 geocoder" id="geocoder" placeholder="Search..." on:change={searchProperty} bind:value={searchValue}>
+  <input type="text" class="px-4 mx-2 p-2 geocoder mb-2" id="geocoder" placeholder="Search..." on:change={searchProperty} bind:value={searchValue}>
 
-  <select class="custom-select p-2 mx-1">
+  <select class="custom-select p-2 m-1">
     <option selected>Lease</option>
     <option value="1">Buy</option>
     <option value="2">Lease</option>
     <option value="3">Rent</option>
   </select>
-  <select class="custom-select p-2 mx-1">
+  <select class="custom-select p-2 m-1">
     <option selected>Property type</option>
     <option value="1">Office</option>
     <option value="2">Industry</option>
     <option value="3">Retail</option>
   </select>
-  <select class="custom-select p-2 mx-1">
+  <select class="custom-select p-2 m-1">
     <option selected>Property size</option>
     <option value="1">One</option>
     <option value="2">Two</option>
     <option value="3">Three</option>
   </select>
-  <select class="custom-select p-2 mx-1">
+  <select class="custom-select p-2 m-1">
     <option selected>Floor no</option>
     <option value="1">One</option>
     <option value="2">Two</option>
@@ -283,14 +283,14 @@ if (e===0) {
     <div class="containerr">
       <!--Grid row-->
       <div class="row">
-        <div class="col-sm-7 mb-4 bg-light map position-sticky" id="map">
+        <div class="col-7 mb-4 bg-light" id="map">
           <!-- <div class="text">Google Ad</div> -->
         
 
        
       </div>
         <!--Grid column-->
-        <div class="col-md-5 mb-4">
+        <div class="col-5 mb-4" id="prop-container">
           <!--Section: Content-->
           
 
@@ -322,7 +322,7 @@ if (e===0) {
            
             <!-- Post -->
            <a href="/view/property/{property._id}" style="all:unset">
-            <div class="row property">
+            <div class="row property" id="property">
               <div class="col-md-5 mb-2 image-box"  style={`width:100%;aspect-ratio:1/1;background-image: url(${API}/image/${property.photos[0]});`} >
                 
                     <!-- <img src="/img/imagesr2.jpeg" class="img-fluid"/>
@@ -469,7 +469,27 @@ if (e===0) {
       .ind-property {
         border-bottom: 1px solid grey;
       }
-
+       @media(max-width:768px){
+        .containerr {
+          width: 90%;
+          margin: 0 auto;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+          #map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 200px;
+            width: 100%;
+          }
+          #prop-container {
+            width: 100%;
+            padding-top:220px
+            
+          }
+        }
+       }
 
 
     </style>
