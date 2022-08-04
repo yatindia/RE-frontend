@@ -50,13 +50,19 @@
     .hero > .left {
         padding-top: 5vh;
         margin-top: 12vh;
+
+        h1 {
+            color: #14213d;
+        }
         p{
             width: 80%;
+            color: #14213d;
+
         }
     }
 
     .hero > .right {
-        background-color: #c1202c;
+        background-color: #b6d5eb;
        
     }
     .hero > .right >img {

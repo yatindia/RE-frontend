@@ -79,22 +79,22 @@
      }
 
      .btn {
-         background-color: #c1202c;
-         color: #fff;
+         background-color: #b6d5eb;
+         color: #14213d;
          font-weight: bold;
          box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.173);
          padding: 12px 25px;
      }
  
  
-     form {
+     /* form {
          width: 100%;
          border: 1px solid #c1202c;
          background-color: #c1202c;
          padding: 20px;
          border-radius: 5px;
          box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.173);
-     }
+     } */
 
      label {
          color: #fff;

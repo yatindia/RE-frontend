@@ -190,7 +190,7 @@
      {/if}
    {#if (data.photos).length < 10}
    <div class="container img-btn">
-    <button on:click={()=>{data.photos = [...data.photos, ""]}} type="button" style="width: 200px ;" class="btn btn-danger">Add Image ({(data.photos).length}/10)</button>
+    <button on:click={()=>{data.photos = [...data.photos, ""]}} type="button" style="width: 200px ;" class="btn btndanger">Add Image ({(data.photos).length}/10)</button>
   </div>
    {/if}
   
@@ -438,8 +438,8 @@
           highlights = ""
         }}
         type="button" 
-        class="col-sm-2 btn btn-outline-danger">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill"         
+        class="col-sm-2 btn btn-outlinedanger">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#14213d" class="bi bi-plus-circle-fill"         
               viewBox="0 0 16 16">
               <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
         </svg> 
@@ -547,12 +547,12 @@
               </li>
               {/each}
             </ul>
-            <button on:click={()=>{ floor.amenities = [...floor.amenities, ""]}} type="button" class="btn btn-success">
+            <button on:click={()=>{ floor.amenities = [...floor.amenities, ""]}} type="button" class="btn btndanger">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill"         
                 viewBox="0 0 16 16">
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
                 </svg> 
-                Amenities
+                Add Amenities
             </button>
         {/if}
     </ul>
@@ -571,12 +571,12 @@
 
     {/each}
  <div class="d-flex justify-content-center align-items-center">
-  <button class="btn btn-danger" on:click={()=>{addFloor()}} type="button">
+  <button class="btn btndanger" on:click={()=>{addFloor()}} type="button">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill"         
               viewBox="0 0 16 16">
               <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
               </svg> 
-    Add Floor
+     Add Floor
 
   </button>
  </div>
@@ -599,7 +599,10 @@
 
 
 <style lang="scss">
+form , h1 {
+  color: #14213d;
 
+}
   .highlights {
     padding: 50px auto;
   }
@@ -671,5 +674,15 @@
     padding-bottom: 2%;
     border-radius: 5px;
     box-shadow: 5px 5px 5px rgba(11, 0, 132, 0.07);
+  }
+  .btndanger {
+    background-color: #b6d5eb;
+    color: #14213d;
+    border: 1px solid #14213d;
+
+  }
+  .btn-outlinedanger {
+    background-color: #b6d5eb;
+    border: 1px solid #14213d;
   }
 </style>

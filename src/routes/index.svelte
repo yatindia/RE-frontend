@@ -104,7 +104,9 @@
   background: -moz-radial-gradient(top right, #23EC55, #2D51C1);
   background: radial-gradient(to bottom left, #23EC55, #2D51C1);
 }
-
+h1 {
+  color: #14213d;
+}
 .wrapper {
   margin: 10vh;
 }
@@ -117,6 +119,7 @@
   min-height: 450px;
   box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.2);
 }
+
 .rp {
   background-image:url('/img/immig.jpg') no-repeat center contain/cover;
   background-position: center;

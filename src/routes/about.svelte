@@ -8,7 +8,7 @@
      </div>
  </div>
  </div>
- <div class="bread-bar">
+ <!-- <div class="bread-bar">
          <div class="container">
              <div class="row">
                  <div class="col-md-8 col-sm-6 col-xs-8">
@@ -21,7 +21,7 @@
                  </div>
              </div>
            </div>
-     </div>
+     </div> -->
  <div class="aboutus-secktion paddingTB60">
      <div class="container">
          <div class="row">
@@ -100,7 +100,7 @@
      <div class="container">
          <div class="row">
              <div class="col-md-9 col-sm-9 col-xs-12">
-                 <h3 class="text-white"><span class="glyphicon glyphicon-cog "></span> <b>Homes for sale?</b> Explore properties like a pro.</h3>
+                 <h3 class=""><span class="glyphicon glyphicon-cog "></span> <b>Homes for sale?</b> Explore properties like a pro.</h3>
              </div>
              <!-- <div class="col-md-3 col-sm-3 col-xs-12 Tpadding10">
                  <button type="button" class="btn btn-primary site-btn">Start Right Now</button>
@@ -167,7 +167,8 @@
 }
 .social {
     margin:7px 7px 7px 0px;
-    color:#232323;
+    color: #14213d;
+
 }
 
 
@@ -250,7 +251,8 @@ h1 {
     line-height: 40px;
     letter-spacing: 0px;
     font-weight: 600;
-    color: #000;
+    color: #14213d;
+
 }
 
 h3 {
@@ -259,19 +261,23 @@ h3 {
     letter-spacing: 0px;
     font-weight: 600;
     font-style: normal;
-    color: #000;
+    color: #14213d;
+
+
 }
 
 
 p {
     font-weight: 400;
     font-style: normal;
-    color: #494949;
+    color: #14213d;
+
 }
 
 
 a {
-    color: #494949;
+    color: #14213d;
+
 }
 
 
@@ -311,7 +317,14 @@ i {
     color: #999;
     padding: 0 8px;
 }
+.cta-sektion {
+    background-color: rgb(138, 137, 150);
 
+}
+.cta-sektion h3 {
+    color: #14213d;
+
+}
 
 
 

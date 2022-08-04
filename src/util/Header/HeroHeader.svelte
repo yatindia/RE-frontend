@@ -63,7 +63,7 @@
                 text-decoration: none;
 
                 li {
-                    color: #c1202c;
+                    color: #14213d;
                     text-align: center;
                     font-size: 150%;
                     font-weight: bold;
@@ -79,7 +79,7 @@
    
 
     .nav-p2{
-        background-color: #c1202c;
+        background-color: #b6d5eb;
 
         ul {
             width: 50%;
@@ -95,7 +95,7 @@
                 text-decoration: none;
 
                 li {
-                    color: #ffffff;
+                    color: #14213d;
                     text-align: center;
                     font-size: 150%;
                     font-weight: bold;

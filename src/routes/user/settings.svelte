@@ -98,7 +98,7 @@ const sendNumber = async (e) => {
     <hr width="1" size="auto">
     <div >
         <div>
-            <div class="col">
+            <div class="col mb-4">
                 <h4>
                     <strong class="mb-0">Update Email</strong>
 
@@ -111,7 +111,7 @@ const sendNumber = async (e) => {
                         
                         </div>
                  
-                        <button type="submit" class="btn btn-danger w-100 mt-2">
+                        <button type="submit" class="btn btndanger w-100 mt-2">
                             Update email
                         </button>
                     </div>
@@ -135,7 +135,7 @@ const sendNumber = async (e) => {
                             <input bind:value={oldPassword} type="text" class="form-control my-2" placeholder="Enter New Password">
                         </div>
                  
-                        <button type="submit" class="btn btn-danger w-100 mt-2">
+                        <button type="submit" class="btn btndanger w-100 mt-2">
                             Update Password
                         </button>
                     </div>
@@ -151,6 +151,8 @@ const sendNumber = async (e) => {
 <style lang="scss">
    .containerr {
     width: 36%;
+    background-color: #b6d5eb;
+    color: #14213d;
     margin: 3% auto;
     height: auto;
     padding: 36px 42px;
@@ -163,6 +165,9 @@ const sendNumber = async (e) => {
 
     p {
         font-size: 36px;
+    }
+    h5 {
+    color: #153375;
     }
 
     span {
@@ -179,7 +184,12 @@ const sendNumber = async (e) => {
         }
         
     }
-   
+    .btndanger {
+    background-color: #14213d;
+    color: #fff;
+    border: 1px solid #14213d;
+
+  }
    }
    @media(max-width:976px) {
     .containerr {

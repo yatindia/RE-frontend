@@ -136,10 +136,10 @@
 
 
     footer {
-      background-color: rgb(193,32,44);
+      background-color: #b6d5eb;
 
       * {
-        color: #fff;
+        color: #14213d;
       }
      
     }

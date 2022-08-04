@@ -93,7 +93,7 @@ async function deletePost(_id) {
                         <p>{property.address_1} | {property.address_2}</p>
                         <h5>For: {(property.for).toUpperCase()} | {property.city} </h5>
                         <div class="btnbox">
-                            <a href={`/user/myproperties/update/${property._id}`} class="btn btn-outline-danger w-70 mt-2 update">Update</a>
+                            <a href={`/user/myproperties/update/${property._id}`} class="btn btnoutlinedanger w-70 mt-2 update">Update</a>
                             <button on:click={()=>{deletePost(property._id)}} class="btn btn-danger w-70 mt-2 delete">Delete</button>
                         </div>
                     </div>
@@ -131,7 +131,8 @@ async function deletePost(_id) {
     border-radius: 12px;
     // box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
     .property {
-        background-color: #fff;
+        background-color: #b6d5eb;
+        color: #14213d;
         border: 1px solid rgb(190, 186, 186);
         border-radius: 8px;
         width: 90%;
@@ -144,8 +145,14 @@ async function deletePost(_id) {
         .btnbox {
             display: flex;
             
-            .update {
+            a.update {
                 margin-right: 20px;
+                border: 1.6px solid #14213d;
+
+            }
+            .delete {
+                background-color: #14213d;
+                border: none;
             }
         }
     }

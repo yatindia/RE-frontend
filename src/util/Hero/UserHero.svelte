@@ -67,8 +67,8 @@
 })    
 </script>
 
-<div class="hero">
-    <div class="container mt-5`">
+<div class="hero mt-4">
+    <div class="containerr mt-5`">
         <div class="row">
           <div class="col-sm qr">
 
@@ -134,11 +134,14 @@
         min-height: 30vh;
         width: 100%;
         padding: 5vh 0;
-        background-color: rgb(255, 235, 235);
+        // background-color: rgb(255, 235, 235);
         border-radius: 0 0 30px  30px;
+        color: #14213d;
+
 
         strong {
-           color: red;
+            color: #062974;
+
         }
         .social-container{
 
@@ -147,9 +150,12 @@
           
         }
 
-        .container {
-            max-width:50%;
+        .containerr {
+            max-width:70%;
             margin: auto;
+            // background-color: #b6d5eb;
+            // padding: 26px 18px;
+            // border-radius: 8px;
         }
 
         .qr {

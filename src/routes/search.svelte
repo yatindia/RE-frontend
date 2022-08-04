@@ -446,7 +446,7 @@ if (i===0) {
         transition: all 0.2s;
       }
   .property:hover {
-          border: 3px solid rgb(226, 41, 41);
+          border: 3px solid #1c366e;
           border-radius: 8px;
         }
 
