@@ -1,7 +1,5 @@
 <script context="module">
   export function load({params}) {
-
-
       return {
           props: {id: params.id}
       }
@@ -9,7 +7,7 @@
 </script>
 
 <script>
-  import { API } from "../../../../config";
+  import { API, IMG } from "../../../../config";
   import { protectedRoute } from "../../../../components/functions";
 
   import ImageUpdate from "../../../../components/ImageUpdate.svelte";
@@ -26,6 +24,7 @@
   mapboxgl.accessToken = 'pk.eyJ1Ijoic2F0aHlhZGV2IiwiYSI6ImNsM3R5bGh1cjBlZ2wzaXBjazI2ZTBnMm8ifQ.GLQgbjT3w49JfCTJ_iEsQA'
 
 
+
     let data = Property
     let mapElement;
     let map
@@ -34,12 +33,35 @@
     export let id
 
 
+    async function refreshImage(){
+      
+      let token = window.localStorage.getItem("login");
+                    token = JSON.parse(token)
+
+                      await fetch(`${API}/property/${id}`, {
+                          method: "GET",
+                          headers: {
+                              "Content-Type": "application/json",
+                              Authorization: `Bearer ${token}`,
+                          }
+                      })
+                      .then(res => res.json())
+                      .then(res => {
+
+                        data = {...data, photos: res.data.photos}
+
+                        // setTimeout(()=>{
+                        //   data = {...data, photos: res.data.photos}
+                        // }, 2000)
+                        
+                      })
+    }
+
+
         onMount(async () => {
 
-       
-
           let token = window.localStorage.getItem("login");
-            token = JSON.parse(token)
+          token = JSON.parse(token)
 
             await fetch(`${API}/property/post/${id}`, {
                 method: "GET",
@@ -51,26 +73,9 @@
             .then(res => res.json())
             .then(res => {
 
-              let ims = []
-
-
-              let inf = (res.data.photos).map(async (element)=>{
-                return await fetchFile(element)
-              })
-
-              for (let index = 0; index < (res.data.photos).length; index++) {
-                const element = (res.data.photos)[index];
-                ims = [...ims , fetchFile(element)]
-                
-              }
-
-              return inf
-
+           
+              data = res.data
               
-            }).then(async (mg)=>{
-              // res.data.photos = mg
-              console.log(await mg);
-              // data = res.data
 
               const map = new mapboxgl.Map({
                 container: "map",
@@ -83,16 +88,17 @@
 
      
               map.on("load", () =>{
+                console.log([data.gps.lng, data.gps.lat]);
                 let marker = new mapboxgl.Marker({
                     color: "red",
                     draggable: true
                     })
-                    .setLngLat(current_position)
+                    .setLngLat([data.gps.lng, data.gps.lat])
                     .addTo(map)
                 marker.on("drag", (arg)=>{
                   data.gps.lng = arg.target._lngLat.lng
                   data.gps.lat = arg.target._lngLat.lat
-                  console.log([data.gps.lng, data.gps.lat]);
+            
                 })
               })
             })
@@ -137,32 +143,16 @@
           return false;
         }
 
-    
-          data.photos.forEach( async (image) => {
-
-          let img = new FormData
-          img.append("image", image)
-
-          await axios({
-            method: "post",
-            url : `${API}/property/imageupload`,
-            headers: {"Authorization": `<Bearer> ${token}`},
-            data: {image}
-          })
-          .then(res => {
-            if (res.data.status) {
-              result = [...result, res.data.data]
-            }
-          })
-          });
-
 
           await fetch(`${API}/property/${data._id}`, {
             method:"PUT", headers: {
               "Content-Type" : "application/json",
               "Authorization": `<Bearer> ${token}`
               
-              }, body: JSON.stringify({property: {...data, photos: result}})})
+              }, body: JSON.stringify({
+                property: {...data, gps: {lat: current_position[1], lng: current_position[0]}}
+              })
+              })
             .then(res => res.json())
             .then(res => {
               if (res.status) {
@@ -181,25 +171,58 @@
 
 
 
+ let fileinput
 
+ const onFileSelected =async (e)=>{
 
-async function fetchFile(url) {
-   let datum = await fetch(url).then(res => res.blob()).then( async (file) => {
-    
-    		let dataURI = await blobToDataUrl(file);
-        return dataURI
+  let token = window.localStorage.getItem("login");
+          token = JSON.parse(token)
    
-    })
+            let sendImage
+            let image = e.target.files[0];
+            let reader = new FileReader();
+            reader.readAsDataURL(image);
+            reader.onload = async (e) => {
+              sendImage = e.target.result
 
-    return datum
+                await axios({
+                  method: "post",
+                  url : `${API}/property/imageupdate`,
+                  headers: {"Authorization": `<Bearer> ${token}`},
+                  data: {image: e.target.result, _id: data._id}
+                })
+                .then( async (res) => {
+                  if (res.data.status) {
+                    
+                    let token = window.localStorage.getItem("login");
+                    token = JSON.parse(token)
+
+                      await fetch(`${API}/property/post/${id}`, {
+                          method: "GET",
+                          headers: {
+                              "Content-Type": "application/json",
+                              Authorization: `Bearer ${token}`,
+                          }
+                      })
+                      .then(res => res.json())
+                      .then(res => {
+
+                        data = {...data, photos: res.data.photos}
+
+                        // setTimeout(()=>{
+                        //   data = {...data, photos: res.data.photos}
+                        // }, 2000)
+                        
+                      })
+                              
+                  }
+                })
+            };
+
+
+            
 }
 
-async function blobToDataUrl(blob) {
-
-
-
-  return new Promise(r => {let a=new FileReader(); a.onload=r; a.readAsDataURL(blob)}).then(e => e.target.result);
-}
 
 </script>
 
@@ -208,33 +231,24 @@ async function blobToDataUrl(blob) {
   <h1 class="text-center mt-5">UPDATE PROPERTY</h1>
   <form on:submit|preventDefault={()=>{submit()}}>
     <div class="img">
-      {#await data.photos}
-        -
-      {:then photos} 
-{photos}
-        {#if (data.photos).length > 0}
-        <div class="container row img-container">
-          
-        {#each data.photos as photo, i}
-          <span class="img-span">
-            <ImageUpdate
-            on:delete={
-            ({detail})=>{ 
-              (data.photos).splice(i,1)
-              data.photos = data.photos
-              }} 
-              order={i} bind:avatar={photo} />
-          </span>
-        {/each}
+      {#if (data.photos).length > 0}
+      <div class="container row img-container">
         
-      </div>
-        {/if}
-        
-      {/await}
+      {#each data.photos as photo, i}
+        <span class="img-span">
+          <ImageUpdate on:delete={()=>refreshImage()} src={photo} id={data._id}  />
+        </span>
+      {/each}
+      
+    </div>
+      {/if}
    
    {#if (data.photos).length < 10}
+ 
+  <input style="display:none" type="file" accept=".png, .jpg" on:change={(e)=>onFileSelected(e)} bind:this={fileinput} >
+       
    <div class="container img-btn">
-    <button on:click={()=>{data.photos = [...data.photos, ""]}} type="button" style="width: 200px ;" class="btn btn-danger">Add Image ({(data.photos).length}/10)</button>
+    <button on:click={()=>{fileinput.click();}} type="button" style="width: 200px ;" class="btn btn-danger">Add Image ({(data.photos).length}/10)</button>
   </div>
    {/if}
   
@@ -333,7 +347,7 @@ async function blobToDataUrl(blob) {
         <div class="col-6 col-sm-6 col-lg-6 col-xl-3 mt-5">
           <label for="#">Zip Code</label>
           <div class="form-group">
-            <input required class="form-control" type="text" placeholder="ZIP Code">
+            <input bind:value={data.zip_code} required class="form-control" type="text" placeholder="ZIP Code">
           </div>
         </div>
 

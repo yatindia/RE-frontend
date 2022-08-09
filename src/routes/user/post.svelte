@@ -21,6 +21,8 @@
     let map
     let highlights
     let current_position = [data.gps.lng, data.gps.lat]
+
+  
         onMount(() => {
      
               const map = new mapboxgl.Map({
@@ -78,13 +80,7 @@
           alert("Please upload, atleast 1 image")
           return false;
         }
-        // if ( (data.photos).find((e)=>{ return e== "" })  == "") {
-        //   alert("Please upload atleast 1 image")
-        //   return false;
-        // }
-
-    
-
+      
         let p = new Promise(async (resolve, reject)=>{
             let result = []
 

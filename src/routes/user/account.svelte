@@ -2,7 +2,7 @@
 import {protectedRoute} from "../../components/functions"
 import {onMount} from "svelte"
 import UserHero from "../../util/Hero/UserHero.svelte"
-import {API} from "../../config"
+import {API, IMG} from "../../config"
 
 onMount(()=>protectedRoute())
 
@@ -92,7 +92,7 @@ await fetch(`${API}/property/${_id}`, {
     <div class="property">
 
         {#if  property.photos && (property.photos).length > 0}
-            <img width="300px" src={`${API}/image/${property.photos[0]}`} class="img-fluid" alt="">
+            <img width="300px" src={`${IMG}/${property.photos[0]}`} class="img-fluid" alt="">
         {:else}
         <img width="300px" src="/img/placeholder.png" alt="">
         {/if}

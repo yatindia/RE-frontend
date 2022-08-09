@@ -191,7 +191,7 @@
     form {
         width: 95%;
         max-width: 400px;
-        border: 5px solid red;
+        border: 5px solid  #B6D5EB;
         background-color: #fff;
         padding: 20px;
         border-radius: 5px;

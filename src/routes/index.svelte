@@ -1,6 +1,6 @@
 <script>
     import Hero from "../util/Hero/Hero.svelte"
-    import {API} from "../config"
+    import {API, IMG} from "../config"
 
 
 
@@ -53,7 +53,7 @@
     <div class="row">
       {#if properties}
         {#each properties as property}
-           <div class="col-sm-12 col-md-6 col-lg-4 mb-4 rp"><div class="card text-white card-has-bg click-col" style={`background-image:url(${API}/image/${property.photos[0]});`}>
+           <div class="col-sm-12 col-md-6 col-lg-4 mb-4 rp"><div class="card text-white card-has-bg click-col" style={`background-image:url(${IMG}/${property.photos[0]});`}>
            <img class="card-img d-none" src="https://source.unsplash.com/600x00/?tech,street" alt="Goverment Lorem Ipsum Sit Amet Consectetur dipisi?">
           <div class="card-img-overlay d-flex flex-column">
            <div class="card-body">

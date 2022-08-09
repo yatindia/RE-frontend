@@ -11,7 +11,7 @@
     export let id
     import { onMount} from 'svelte'
     import mapboxgl from "mapbox-gl";
-    import { API, Client } from '../../../config';
+    import { API, Client, IMG } from '../../../config';
     import { Email, HackerNews, Reddit, LinkedIn, Pinterest, Telegram, Tumblr, Vk, WhatsApp, Xing, Facebook, Twitter, Line } from 'svelte-share-buttons-component';
     mapboxgl.accessToken = 'pk.eyJ1Ijoic2F0aHlhZGV2IiwiYSI6ImNsM3R5bGh1cjBlZ2wzaXBjazI2ZTBnMm8ifQ.GLQgbjT3w49JfCTJ_iEsQA';
 
@@ -78,7 +78,7 @@
             {#each property.photos as photo}
             <div class="carousel-item active">
                 <img class="d-block w-100"
-                    src={`${API}/image/${photo}`} 
+                    src={`${IMG}/${photo}`} 
                     alt="First slide">
             </div>
 

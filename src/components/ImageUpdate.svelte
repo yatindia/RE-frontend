@@ -1,45 +1,52 @@
 <script>
 	import {createEventDispatcher} from "svelte"
-	export let  avatar;
-	export let order
-	let  fileinput;
+	import {API, IMG} from "../config"
+	export let  src;
+	export let id
 
 	let dispatch = createEventDispatcher()
-	
-	const onFileSelected =(e)=>{
+
+	async function deleteImage(_img, id) {
+		let token = window.localStorage.getItem("login");
+          token = JSON.parse(token)
+
+
+		await fetch(`${API}/property/imagedelete`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`,
+					},
+					body: JSON.stringify({
+					filename: _img,
+					_id: id
+					})
+				})
+				.then(res => res.json())
+				.then((res)=>{
+				if (res.status) {
+					dispatch("delete")
+				}
+			})
+				
+		}
+
+
 
 		
-    let image = e.target.files[0];
-            let reader = new FileReader();
-            reader.readAsDataURL(image);
-            reader.onload = e => {
-                 avatar = e.target.result
-            };
-}
+
 	
 </script>
 <div id="up">
-	{order+1}
-        {#if avatar}
-		<div 
-			on:click={()=>{ dispatch("delete", order)}}
-			class="avatarBG" 
-			style={`background-image: url(${avatar});`}>
-			<img class="delete" src="/img/delete.png" alt="" /> 
-		</div>
-        {:else}
+
 
 		<div 
-			on:click={()=>{ dispatch("delete", order)}}
+			on:click={()=>{  deleteImage(src, id)}}
 			class="avatarBG" 
-			style={`background-image: url(/img/building_ph.jpg);`}>
+			style={`background-image: url(${IMG}/${src});`}>
 			<img class="delete" src="/img/delete.png" alt="" /> 
 		</div>
-        {/if}
-		<img class="upload" 
-		src="/img/upload.png" alt="" 
-		on:click={()=>{fileinput.click();}} />
-        <input style="display:none" type="file" accept=".png, .jpg" on:change={(e)=>onFileSelected(e)} bind:this={fileinput} >
+    
 </div>
 <style lang="scss"> 
 	#up{

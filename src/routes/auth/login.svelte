@@ -152,7 +152,7 @@
                 <input type="checkbox" class="form-check-input" id="exampleCheck1">
                 <label class="form-check-label" for="exampleCheck1">Keep Me Logged In</label>
             </div>
-            <button type="submit" class="btn btn-danger w-100 mt-2">Login</button>
+            <button type="submit" class="btn btn-danger w-100 mt-2" style="background-color: #B6D5EB; border-color: :#000; color: #000">Login</button>
     
             <div class="form-group">
                 <a href={`./forgotPassword?email=${encodeURIComponent(form.email)}`} class="text-decoration-none text-danger d-block text-center w-100 mt-4">
@@ -160,7 +160,7 @@
                 </a>
             </div>
             <div class="form-group">
-                <a href="/auth/signup" class="text-decoration-none text-danger d-block text-center w-100 mt-2">
+                <a href="/auth/signup" class="text-decoration-none text-danger d-block text-center w-100 mt-2" >
                    Don't have an account? Signup
                 </a>
             </div>
@@ -179,14 +179,14 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background-color: #c1202c
+        background-color: #B6D5EB
     }
 
 
     form {
         width: 95%;
         max-width: 400px;
-        border: 1px solid red;
+        border: 1px solid #B6D5EB;
         background-color: #fff;
         padding: 20px;
         border-radius: 5px;
