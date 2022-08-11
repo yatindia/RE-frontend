@@ -1,5 +1,5 @@
 <script>
-  import { API } from "../../config";
+  import { API , PAYMENT} from "../../config";
   import { protectedRoute } from "../../components/functions";
   import Property from "../../util/Data/Property";
   import ImageUpload from "../../components/ImageUpload.svelte";
@@ -15,8 +15,34 @@
 
   mapboxgl.accessToken = 'pk.eyJ1Ijoic2F0aHlhZGV2IiwiYSI6ImNsM3R5bGh1cjBlZ2wzaXBjazI2ZTBnMm8ifQ.GLQgbjT3w49JfCTJ_iEsQA'
 
-
+  let token
     let data = Property
+    let amentieslist = [
+    "CodingMak",
+    "CodingMaker",
+    "YouTube",
+    "YouTube cod",
+    "YouTube CodingMak",
+    "YouTube CodingMaker",
+    "YouTuber",
+    "YouTube Channel",
+    "Blogger",
+    "Facebook",
+    "Freelancer",
+    "Facebook Page",
+    "Developer",
+    "Web Designer",
+    "website Developer",
+    "Login Form in HTML & CSS",
+    "How to learn HTML & CSS",
+    "How to learn JavaScript",
+    "How to became Freelancer",
+    "How to became Web Designer",
+    "How to start Gaming Channel",
+    "How to start YouTube Channel",
+    "What does HTML stands for?",
+    "What does CSS stands for?",
+];
     let mapElement;
     let map
     let highlights
@@ -24,6 +50,7 @@
 
   
         onMount(() => {
+          token = JSON.parse(localStorage.getItem("login"))
      
               const map = new mapboxgl.Map({
                 container: "map",
@@ -70,9 +97,13 @@
         ]
       }
 
-      async function submit() {
+      
 
-        let token = JSON.parse(localStorage.getItem("login"))
+
+      async function submit(e) {
+        console.log(e);
+        
+
         
 
      
@@ -156,6 +187,69 @@
 
         
       }
+     async function BePro() {
+    
+      // axios
+      // .post(`${PAYMENT}/payment`, {
+      //   headers: {
+      //         "Content-Type" : "application/json"
+      //         },
+      //   body: JSON.stringify({
+      //       "user": {
+      //           "amount": 30,
+      //           "quantity": 1
+      //       }})
+      // })
+      // fetch(`${PAYMENT}/payment`, {
+      //   headers: {'Content-Type': 'application/json'},
+      //   method: "POST",
+      //   body: JSON.stringify({
+      //       "user": {
+      //           "amount": 30,
+      //           "quantity": 1
+      //       }})
+      // })
+let payment = {
+            "payment": {
+                "amount": 30,
+                "quantity": 1
+            }}
+      await axios({
+                method: "post",
+                headers: {"Authorization": `<Bearer> ${token}`},
+                url : `${PAYMENT}/payment`,
+                data : {payment}
+
+              })
+      .then((response) => {
+        console.log(response);
+        if (response.data.url) {
+          window.location.href = response.data.url;
+        }
+      })
+      .catch((err) => console.log(err.message));
+  };
+
+  let filteredAmenties = []
+  let amentiesSearchWord = ''
+
+  function filterData(event) {
+    
+    let searchWord = event.target.value;
+   
+    amentiesSearchWord = searchWord;
+
+    const newFilter = amentieslist.filter((value) => {
+      return value.toLowerCase().includes(searchWord.toLowerCase());
+    });
+
+
+    if (searchWord === "") {
+      filteredAmenties = [];
+    } else {
+      filteredAmenties = newFilter;
+    }
+  }
 
 </script>
 <svelte:head>
@@ -530,8 +624,10 @@
           </div>
             <ul>
               {#each floor.amenities as amenity, index}
-              <li class="amenities">
-                <input class="form-control" type="text" bind:value={amenity} placeholder={`Amenities No ${index+1}`}>
+              <li style="position: relative;" class="amenities">
+                <input class="form-control" type="text"  on:input={(e)=>filterData(e)}
+                placeholder={`Amenities No ${index+1}`}>
+               
                 <button 
                 on:click={()=>{
                   (data.floors[i].amenities).splice(index, 1)
@@ -540,6 +636,14 @@
                 type="button" class="btn btn-danger">
                   Remove
                 </button>
+                {#if filteredAmenties.length}
+                <div class="amentylist">
+                  {#each filteredAmenties as amenty}
+                    <p>{amenty}</p>
+                  {/each}
+                </div>
+                {/if}
+                
               </li>
               {/each}
             </ul>
@@ -590,9 +694,15 @@
   </div>
     
   </form>
+  <div>
+    <button type="button" on:click={()=>{
+      // submit('PRO')
+      BePro()
+    }} class="btn btn-primary">PRO</button>
+  </div>
 </div>
-
-
+ 
+ 
 
 <style lang="scss">
 form , h1 {
@@ -680,5 +790,25 @@ form , h1 {
   .btn-outlinedanger {
     background-color: #b6d5eb;
     border: 1px solid #14213d;
+  }
+  .amentylist {
+    border: 0.6px rgb(192, 187, 187) solid;
+    border-radius: 6px;
+    height: 240px;
+    overflow-y: scroll;
+    position: relative;
+    top: 0;
+    left: 0;
+
+    p {
+      color: rgb(87, 84, 84);
+      padding: 6px;
+      margin: 0;
+    }
+    p:hover {
+        cursor: pointer;
+        background-color: #cfe5f5;
+      }
+
   }
 </style>
