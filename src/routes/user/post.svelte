@@ -101,11 +101,13 @@
 
 
       async function submit(e) {
-        console.log(e);
-        
 
-        
-
+        let YTRegex = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/
+     
+        if ( !(data.video).match(YTRegex)) {
+          alert("Please Check your youtube video link")
+          return false;
+        }
      
         if ( (data.photos).length == 0) {
           alert("Please upload, atleast 1 image")
@@ -399,7 +401,7 @@ let payment = {
         </div>
 
         <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
-          <label for="#">Year Build</label>
+          <label for="#">Year Built</label>
           <div class="form-group">
             <input required bind:value={data.year_built} class="form-control" type="text" placeholder="Year built">
           </div>
@@ -597,7 +599,7 @@ let payment = {
         <div class="col-sm-3">
           <label for="#">CONDITION</label>
           <select bind:value={floor.condition} class="form-control">
-            <option value="partially build"> Partially Build </option>
+            <option value="partially built"> Partially Built </option>
             <option value="ready to use"> Ready to use</option>
             <option value="needs repair"> Needs repair </option>
             <option value="fully furnished"> Fully furnished </option>

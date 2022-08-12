@@ -36,25 +36,19 @@
     async function refreshImage(){
       
       let token = window.localStorage.getItem("login");
-                    token = JSON.parse(token)
+      token = JSON.parse(token)
 
-                      await fetch(`${API}/property/${id}`, {
-                          method: "GET",
-                          headers: {
-                              "Content-Type": "application/json",
-                              Authorization: `Bearer ${token}`,
-                          }
-                      })
-                      .then(res => res.json())
-                      .then(res => {
-
-                        data = {...data, photos: res.data.photos}
-
-                        // setTimeout(()=>{
-                        //   data = {...data, photos: res.data.photos}
-                        // }, 2000)
-                        
-                      })
+      await fetch(`${API}/property/${id}`, {
+          method: "GET",
+          headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+          }
+      })
+      .then(res => res.json())
+      .then(res => {
+        data = {...data, photos: res.data.photos}
+      })
     }
 
 
@@ -95,7 +89,7 @@
                     })
                     .setLngLat([data.gps.lng, data.gps.lat])
                     .addTo(map)
-                marker.on("drag", (arg)=>{
+                marker.on("dragend", (arg)=>{
                   data.gps.lng = arg.target._lngLat.lng
                   data.gps.lat = arg.target._lngLat.lat
             
@@ -126,12 +120,21 @@
 
         let token = JSON.parse(localStorage.getItem("login"))
         let result = []
+        let YTRegex = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/
+
+
 
      
+        if ( !(data.video).match(YTRegex)) {
+          alert("Please Check your youtube video link")
+          return false;
+        }
+
         if ( data.photos && (data.photos).length == 0) {
           alert("Please upload atleast 1 image")
           return false;
         }
+
         if ( (data.photos).find((e)=>{ return e=="" })  == "") {
           alert("Please upload atleast 1 image")
           return false;
@@ -150,7 +153,7 @@
               "Authorization": `<Bearer> ${token}`
               
               }, body: JSON.stringify({
-                property: {...data, gps: {lat: current_position[1], lng: current_position[0]}}
+                property: {...data, gps: {lat: data.gps.lat, lng: data.gps.lng}}
               })
               })
             .then(res => res.json())
@@ -367,7 +370,7 @@
         </div>
 
         <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
-          <label for="#">Year Build</label>
+          <label for="#">Year Built</label>
           <div class="form-group">
             <input required bind:value={data.year_built} class="form-control" type="text" placeholder="Year built">
           </div>
@@ -565,7 +568,7 @@
         <div class="col-sm-3">
           <label for="#">CONDITION</label>
           <select bind:value={floor.condition} class="form-control">
-            <option value="partially build"> Partially Build </option>
+            <option value="partially built"> Partially Built </option>
             <option value="ready to use"> Ready to use</option>
             <option value="needs repair"> Needs repair </option>
             <option value="fully furnished"> Fully furnished </option>

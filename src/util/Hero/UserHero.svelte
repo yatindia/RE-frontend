@@ -74,12 +74,12 @@
 
             <h3 class="title-d">Share Your Listings</h3>
             {#if user != {}}
-            <Qr text={`${Client}/view/${user._id}`} 
+            <Qr text={`${Client}/view/user/${user._id}`} 
                 qrSize={256} isShowLogo 
                 logoData="/img/favicon.png" 
-                foregroundColor="#fff"
+                foregroundColor="#14213D"
                 isShowBackground={true}
-                backgroundColor="#C1202C"
+                backgroundColor="#B6D5EB"
              />
         
             {/if}
