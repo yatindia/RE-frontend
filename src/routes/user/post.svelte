@@ -70,7 +70,7 @@
                 marker.on("drag", (arg)=>{
                   data.gps.lng = arg.target._lngLat.lng
                   data.gps.lat = arg.target._lngLat.lat
-                  console.log([data.gps.lng, data.gps.lat]);
+                
                 })
               })
  
@@ -101,13 +101,11 @@
 
 
       async function submit(e) {
+        console.log(e);
+        
 
-        let YTRegex = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/
-     
-        if ( !(data.video).match(YTRegex)) {
-          alert("Please Check your youtube video link")
-          return false;
-        }
+        
+
      
         if ( (data.photos).length == 0) {
           alert("Please upload, atleast 1 image")
@@ -170,26 +168,38 @@
               }else {
                 alert(res.message)
               }
+              
             })
-          }
+          }if(e === 'PREMIUM'){
+          let payment = {
+            "payment": {
+                "amount": 30,
+                "quantity": 1,
+                "success_URL": `${API}/user/paymentSuccess`,
+                "failure_URL": `${API}/user/paymentFailure`
+
+            }}
+      await axios({
+                method: "post",
+                headers: {"Authorization": `<Bearer> ${token}`},
+                url : `${PAYMENT}/payment`,
+                data : {payment}
+
+              })
+      .then((response) => {
+        console.log(response);
+        if (response.data.url) {
+          window.location.href = response.data.url;
+        }
+      })
+      .catch((err) => console.log(err.message));
+        }
 
         })
-    
-         
-
-       
-
-          
-
-
-          
-        
-        
-        
-
+     
         
       }
-     async function BePro() {
+    //  async function BePro() {
     
       // axios
       // .post(`${PAYMENT}/payment`, {
@@ -211,26 +221,29 @@
       //           "quantity": 1
       //       }})
       // })
-let payment = {
-            "payment": {
-                "amount": 30,
-                "quantity": 1
-            }}
-      await axios({
-                method: "post",
-                headers: {"Authorization": `<Bearer> ${token}`},
-                url : `${PAYMENT}/payment`,
-                data : {payment}
+// let payment = {
+//             "payment": {
+//                 "amount": 30,
+//                 "quantity": 1,
+//                 "success_URL": `${API}/user/paymentSuccess`,
+//                 "failure_URL": `${API}/user/paymentFailure`
 
-              })
-      .then((response) => {
-        console.log(response);
-        if (response.data.url) {
-          window.location.href = response.data.url;
-        }
-      })
-      .catch((err) => console.log(err.message));
-  };
+//             }}
+//       await axios({
+//                 method: "post",
+//                 headers: {"Authorization": `<Bearer> ${token}`},
+//                 url : `${PAYMENT}/payment`,
+//                 data : {payment}
+
+//               })
+//       .then((response) => {
+//         console.log(response);
+//         if (response.data.url) {
+//           window.location.href = response.data.url;
+//         }
+//       })
+//       .catch((err) => console.log(err.message));
+//   };
 
   let filteredAmenties = []
   let amentiesSearchWord = ''
@@ -246,7 +259,7 @@ let payment = {
     });
 
 
-    if (searchWord === "") {
+    if (amentiesSearchWord === "") {
       filteredAmenties = [];
     } else {
       filteredAmenties = newFilter;
@@ -401,7 +414,7 @@ let payment = {
         </div>
 
         <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
-          <label for="#">Year Built</label>
+          <label for="#">Year Build</label>
           <div class="form-group">
             <input required bind:value={data.year_built} class="form-control" type="text" placeholder="Year built">
           </div>
@@ -599,7 +612,7 @@ let payment = {
         <div class="col-sm-3">
           <label for="#">CONDITION</label>
           <select bind:value={floor.condition} class="form-control">
-            <option value="partially built"> Partially Built </option>
+            <option value="partially build"> Partially Build </option>
             <option value="ready to use"> Ready to use</option>
             <option value="needs repair"> Needs repair </option>
             <option value="fully furnished"> Fully furnished </option>
@@ -628,7 +641,7 @@ let payment = {
               {#each floor.amenities as amenity, index}
               <li style="position: relative;" class="amenities">
                 <input class="form-control" type="text"  on:input={(e)=>filterData(e)}
-                placeholder={`Amenities No ${index+1}`}>
+                placeholder={`Amenities No ${index+1}`} bind:value={amenity}>
                
                 <button 
                 on:click={()=>{
@@ -641,7 +654,11 @@ let payment = {
                 {#if filteredAmenties.length}
                 <div class="amentylist">
                   {#each filteredAmenties as amenty}
-                    <p>{amenty}</p>
+                    <p on:click={(e) => {
+                      amentiesSearchWord=e.target.innerText;
+                      floor.amenities[index] = amentiesSearchWord
+                      if(amentiesSearchWord) filteredAmenties = [];
+                      }}>{amenty}</p>
                   {/each}
                 </div>
                 {/if}
@@ -692,16 +709,17 @@ let payment = {
 
 
   <div class="d-flex justify-content-center align-items-center mb-5">
-    <button type="submit" class="btn btn-primary">Submit the property</button>
+    <button type="submit" class="btn btndanger mx-3" on:click={()=>submit()}>Submit the property</button>
+    <button type="button" on:click={()=>submit('PREMIUM')} class="btn btn-success">Try Premium</button>
   </div>
     
   </form>
-  <div>
+  <!-- <div>
     <button type="button" on:click={()=>{
       // submit('PRO')
       BePro()
     }} class="btn btn-primary">PRO</button>
-  </div>
+  </div> -->
 </div>
  
  

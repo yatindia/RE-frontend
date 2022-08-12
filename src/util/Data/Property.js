@@ -30,17 +30,17 @@ let Property = {
   
   floors: [
   
-    // {
-    //   floor_number:0,
-    //   floor_size: 0,
-    //   term: "cxcv",
-    //   rate: 0,
-    //   space_use: "office",
-    //   condition: "ready to use",
-    //   amenities: ["xcvxc"],
-    //   period_of_tenure: 0,
-    //   avaliable: true,
-    // }
+    {
+      floor_number:0,
+      floor_size: 0,
+      term: "cxcv",
+      rate: 0,
+      space_use: "office",
+      condition: "ready to use",
+      amenities: ["xcvxc"],
+      period_of_tenure: 0,
+      avaliable: true,
+    }
   ]
   
 };

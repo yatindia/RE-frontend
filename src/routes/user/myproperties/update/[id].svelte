@@ -6,731 +6,377 @@
   }
 </script>
 
+<!-- svelte-ignore non-top-level-reactive-declaration -->
 <script>
-  import { API, IMG } from "../../../../config";
-  import { protectedRoute } from "../../../../components/functions";
-
-  import ImageUpdate from "../../../../components/ImageUpdate.svelte";
-  import axios from "axios"
-  import Countries from "../../../../util/Data/Countries"
-  import States from "../../../../util/Data/States"
-  import Property from "../../../../util/Data/Property";
-
-
-  import { onMount } from "svelte";
-  onMount(() => protectedRoute());
-
+  export let id
+  import { onMount} from 'svelte'
   import mapboxgl from "mapbox-gl";
-  mapboxgl.accessToken = 'pk.eyJ1Ijoic2F0aHlhZGV2IiwiYSI6ImNsM3R5bGh1cjBlZ2wzaXBjazI2ZTBnMm8ifQ.GLQgbjT3w49JfCTJ_iEsQA'
+  import { API, Client, IMG } from '../../../config';
+  import { Email, HackerNews, Reddit, LinkedIn, Pinterest, Telegram, Tumblr, Vk, WhatsApp, Xing, Facebook, Twitter, Line } from 'svelte-share-buttons-component';
+  mapboxgl.accessToken = 'pk.eyJ1Ijoic2F0aHlhZGV2IiwiYSI6ImNsM3R5bGh1cjBlZ2wzaXBjazI2ZTBnMm8ifQ.GLQgbjT3w49JfCTJ_iEsQA';
 
+  let userData;
+  let property;
+  $: url = `${Client}/view/${id}`;
+$: title = `Hi, I have listed ${property?.title? property.title: "My Property"} in Commercial Listing Pro ${property?.for? "for "+property.for: ""}`;
+$: desc = 'User Commercial Listing Pro is not only a listing website for properties but also a new hub for Real Estate Developers and Realtors';
 
+  onMount(async () => {
 
-    let data = Property
-    let mapElement;
-    let map
-    let highlights
-    let current_position = [data.gps.lng, data.gps.lat]
-    export let id
-
-
-    async function refreshImage(){
-      
       let token = window.localStorage.getItem("login");
       token = JSON.parse(token)
 
-      await fetch(`${API}/property/${id}`, {
+      await fetch(`${API}/user`, {
+          method: "POST",
+          headers: {
+              "Content-Type" : "application/json",
+              "Authorization": `<Bearer> ${token}`
+          }
+      })
+      .then(res => res.json())
+      .then((res)=>{
+          if (res.status) {
+              userData = res.data.accountVerified
+              console.log(userData);
+          }
+      })
+
+      const response = await fetch(`${API}/property/post/${id}`, {
           method: "GET",
           headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
           }
-      })
-      .then(res => res.json())
-      .then(res => {
-        data = {...data, photos: res.data.photos}
-      })
-    }
-
-
-        onMount(async () => {
-
-          let token = window.localStorage.getItem("login");
-          token = JSON.parse(token)
-
-            await fetch(`${API}/property/post/${id}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                }
-            })
-            .then(res => res.json())
-            .then(res => {
-
-           
-              data = res.data
-              
-
-              const map = new mapboxgl.Map({
-                container: "map",
-                style: 'mapbox://styles/mapbox/streets-v11',
-                center:[-74.5, 40],
-                zoom: 5,
-              });
-
-
-
-     
-              map.on("load", () =>{
-                console.log([data.gps.lng, data.gps.lat]);
-                let marker = new mapboxgl.Marker({
-                    color: "red",
-                    draggable: true
-                    })
-                    .setLngLat([data.gps.lng, data.gps.lat])
-                    .addTo(map)
-                marker.on("dragend", (arg)=>{
-                  data.gps.lng = arg.target._lngLat.lng
-                  data.gps.lat = arg.target._lngLat.lat
-            
-                })
-              })
-            })
       });
-    
-    
-      let addFloor = () =>{
-        data.floors = [
-          ...data.floors,
-          {
-            floor_number:0,
-            floor_size: 0,
-            term: "",
-            rate: 0,
-            space_use: "",
-            condition: "",
-            amenities: [""],
-            period_of_tenure: 0,
-            avaliable: true,
-          }
-        ]
-      }
+      const data = await response.json();
+      console.log(data)
+      property = data.data
 
-      async function submit() {
+      console.log(property.gps);
 
-        let token = JSON.parse(localStorage.getItem("login"))
-        let result = []
-        let YTRegex = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/
+      let map
+     map = new mapboxgl.Map({
+              container: "map",
+              style: 'mapbox://styles/mapbox/streets-v11',
+              center: [property.gps.lat, property.gps.lng],
+              zoom: 15,
+            });
+       map.on('load', ()=>{
+          new mapboxgl.Marker({
+                  color: "red",
+                  draggable: false
+                  })
+                  .setLngLat([property.gps.lat, property.gps.lng])
+                  .addTo(map)
+      })
 
 
-
-     
-        if ( !(data.video).match(YTRegex)) {
-          alert("Please Check your youtube video link")
-          return false;
-        }
-
-        if ( data.photos && (data.photos).length == 0) {
-          alert("Please upload atleast 1 image")
-          return false;
-        }
-
-        if ( (data.photos).find((e)=>{ return e=="" })  == "") {
-          alert("Please upload atleast 1 image")
-          return false;
-        }
-
-        console.log((data.photos).find((e)=>{ return e=="" }) == "");
-        if ( !data.floors) {
-          alert("Please add atleast 1 floor")
-          return false;
-        }
-
-
-          await fetch(`${API}/property/${data._id}`, {
-            method:"PUT", headers: {
-              "Content-Type" : "application/json",
-              "Authorization": `<Bearer> ${token}`
-              
-              }, body: JSON.stringify({
-                property: {...data, gps: {lat: data.gps.lat, lng: data.gps.lng}}
-              })
-              })
-            .then(res => res.json())
-            .then(res => {
-              if (res.status) {
-                alert("Success")
-                window.location.reload()
-              }else {
-                alert(res.message)
-              }
-            })
-        
-        
-        
-
-        
-      }
-
-
-
- let fileinput
-
- const onFileSelected =async (e)=>{
-
-  let token = window.localStorage.getItem("login");
-          token = JSON.parse(token)
-   
-            let sendImage
-            let image = e.target.files[0];
-            let reader = new FileReader();
-            reader.readAsDataURL(image);
-            reader.onload = async (e) => {
-              sendImage = e.target.result
-
-                await axios({
-                  method: "post",
-                  url : `${API}/property/imageupdate`,
-                  headers: {"Authorization": `<Bearer> ${token}`},
-                  data: {image: e.target.result, _id: data._id}
-                })
-                .then( async (res) => {
-                  if (res.data.status) {
-                    
-                    let token = window.localStorage.getItem("login");
-                    token = JSON.parse(token)
-
-                      await fetch(`${API}/property/post/${id}`, {
-                          method: "GET",
-                          headers: {
-                              "Content-Type": "application/json",
-                              Authorization: `Bearer ${token}`,
-                          }
-                      })
-                      .then(res => res.json())
-                      .then(res => {
-
-                        data = {...data, photos: res.data.photos}
-
-                        // setTimeout(()=>{
-                        //   data = {...data, photos: res.data.photos}
-                        // }, 2000)
-                        
-                      })
-                              
-                  }
-                })
-            };
-
-
-            
-}
-
+  })
 
 </script>
 
+<svelte:head>
+<link rel="icon" href="/img/favicon.png" />
+<title>Property - { property? property.title:""}</title>
+</svelte:head>
 
-<div >
-  <h1 class="text-center mt-5">UPDATE PROPERTY</h1>
-  <form on:submit|preventDefault={()=>{submit()}}>
-    <div class="img">
-      {#if (data.photos).length > 0}
-      <div class="container row img-container">
-        
-      {#each data.photos as photo, i}
-        <span class="img-span">
-          <ImageUpdate on:delete={()=>refreshImage()} src={photo} id={data._id}  />
-        </span>
-      {/each}
-      
-    </div>
-      {/if}
-   
-   {#if (data.photos).length < 10}
- 
-  <input style="display:none" type="file" accept=".png, .jpg" on:change={(e)=>onFileSelected(e)} bind:this={fileinput} >
-       
-   <div class="container img-btn">
-    <button on:click={()=>{fileinput.click();}} type="button" style="width: 200px ;" class="btn btn-danger">Add Image ({(data.photos).length}/10)</button>
-  </div>
-   {/if}
-  
-    </div>
-    <div class="container">
-      <div class="row">
 
-        <div class="col-sm-4">
-          <label for="#">Property Title</label>
-          <div class="form-group">
-            <input required bind:value={data.title} class="form-control" type="text" placeholder="Title">
+
+
+<div>
+  {#if property}
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+      <ol class="carousel-indicators">
+          <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
+          <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></li>
+          <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></li>
+      </ol>
+      <div class="carousel-inner">
+          {#each property.photos as photo}
+          <div class="carousel-item active">
+              <img class="d-block w-100"
+                  src={`${IMG}/${photo}`} 
+                  alt="First slide">
           </div>
-        </div>
 
-        <div class="col-sm-4">
-          <label for="#">Property Type</label>
-          <select bind:value={data.type} class="form-control">
-            <option value="building">Building</option>
-            <option value="condo">Condo</option>
-          </select>
-        </div>
-        <div class="col-sm-4">
-          <label for="#">Property Use Type</label>
-          <select bind:value={data.space_use} class="form-control">
-            <option value="office"> Office </option>
-            <option value="personal"> Personal </option>
-            <option value="warehouse"> Warehouse </option>
-            <option value="medical"> Medical </option>
-            <option value="academic"> Academic </option>
-            <option value="others"> Others </option>
-          </select>
-        </div>
-
-
-      </div>
-    </div>
-
-    <div class="container">
-      <div class="row">
-        <div class="form-group col-sm-4">
-          <label for="#">Property Sale Type</label>
-          <select bind:value={data.for} class="form-control">
-            <option value="sale"> Sale </option>
-            <option value="rent"> Rent </option>
-            <option value="lease"> Lease </option>
-          </select>
-        </div>
-        <div class="col-sm-4">
-          <label for="#">Address 1</label>
-          <div class="form-group">
-            <input required bind:value={data.address_1} class="form-control" type="text" placeholder="Address 1">
-          </div>
-        </div>
-     
-        <div class="col-sm-4">
-          <label for="#">Address 2</label>
-          <div class="form-group">
-            <input required bind:value={data.address_2} class="form-control" type="text" placeholder="Address 2">
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="container">
-      <div class="row">
-
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-3 mt-5">
-          <label for="#">Country</label>
-          <select bind:value={data.country}  class="form-control">
-            <option value="">Select Country</option>
-            {#each Countries as Country}
-            <option value="{Country}">{Country}</option>
-            {/each}
-          </select>
-        </div>
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-3 mt-5">
-          <label for="#">State</label>
-          <select  bind:value={data.state} class="form-control">
-            {#if data.country != ""}
-            {#each States[data.country] as State}
-            <option value="{State}">{State}</option>
-            {/each}
-            {/if}
-           
-          </select>
-        </div>
-
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-3 mt-5">
-          <label for="#">City</label>
-          <div class="form-group">
-            <input required bind:value={data.city} class="form-control" type="text" placeholder="City">
-          </div>
-        </div>
-
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-3 mt-5">
-          <label for="#">Zip Code</label>
-          <div class="form-group">
-            <input bind:value={data.zip_code} required class="form-control" type="text" placeholder="ZIP Code">
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-
-    <div class="container">
-      <div class="row">
-
-
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
-          <label for="#">Zoning</label>
-          <div class="form-group">
-            <input required bind:value={data.zoning} class="form-control" type="text" placeholder="Zoning">
-          </div>
-        </div>
-
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
-          <label for="#">Year Built</label>
-          <div class="form-group">
-            <input required bind:value={data.year_built} class="form-control" type="text" placeholder="Year built">
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="container">
-      <div class="row">
-
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
-          <label for="#">Is Renovated?</label>
-          <select bind:value={data.renovated} class="form-control">
-            <option value={false}>No</option>
-            <option value={true}>Yes</option>
-          </select>
-  
-        </div>
-
-        <div  class="col-6 col-sm-6 col-lg-6 col-xl-6">
-          <label for="#">Year Renovated</label>
-          <div class="form-group">
-            <input required disabled={!data.renovated} bind:value={data.renovated_year} class="form-control" type="text" placeholder="Renovated Year">
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-
-    <div class="container">
-      <div class="row">
-
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
-          <label for="#">Building Size (SF)</label>
-          <input bind:value={data.building_size} class="form-control" type="text" placeholder="Building Size">
-        </div>
-
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-6">
-          <label for="#">Lot Size (SF)</label>
-          <input required bind:value={data.lot_size} class="form-control" type="text" placeholder="Lot Size">
-        </div>
-
-      </div>
-    </div>
-
-
-    <div class="container">
-      <div class="row">
-
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-3 mt-5">
-          <label for="#">Construction Type</label>
-          <select bind:value={data.construction_type} class="form-control">
-            <option value="metal">Metal</option>
-            <option value="wood">Wood</option>
-            <option value="concrete">Concrete</option>
-          </select>
-        </div>
-
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-3 mt-5">
-          <label for="#">Sewer</label>
-          <select bind:value={data.sewer} class="form-control">
-            <option value="city">City</option>
-            <option value="self">Self</option>
-          </select>
-        </div>
-
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-3 mt-5">
-          <label for="#">Electricity</label>
-          <select bind:value={data.electricity} class="form-control">
-            <option value="commercial">Commerical</option>
-            <option value="Domestic">Domestic</option>
-            <option value="no electricity">No electricity</option>
-          </select>
-        </div>
-
-        <div class="col-6 col-sm-6 col-lg-6 col-xl-3 mt-5">
-          <label for="#">Youtube Video Link</label>
-          <input required bind:value={data.video} class="form-control" type="text" placeholder="Enter Youtube Video Link">
-         </div>
-
-
-      </div>
-    </div>
-
-  <div class="container">
-    
-    <div class="list">
-      <h3>Highlights</h3>
-      <ul class="list-group">
-        {#if data.highlights !=[]}
-          {#each data.highlights as highlight, i}
-          <li class="list-group-item d-flex justify-content-start">
-            <button 
-            on:click={()=>{
-              (data.highlights).splice(i,1)
-              data.highlights=data.highlights
-            }}
-              type="button" 
-              class="btn btn-danger me-2">
-              Delete
-            </button>
-            <p>{highlight}</p> 
-          </li>
           {/each}
-        {/if}
-        
+          
+      </div>
+      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+      </a>
+  </div>
 
-      </ul>
-    </div>
-
-    <div class="container highlights pt-2 pb-2">
-
-     <div class="row">
-       <div class="col-sm-10">
-        <input bind:value={highlights} class="form-control m-0" type="text" placeholder="Enter Highlights">
-       </div>
-      
-      <button 
-        on:click={()=>{
-          data.highlights = [
-            ...data.highlights,
-            highlights
-          ]
-          highlights = ""
-        }}
-        type="button" 
-        class="col-sm-2 btn btn-outline-danger">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill"         
-              viewBox="0 0 16 16">
-              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
-        </svg> 
-        Highlights
-      </button>
-     </div>
-
-    </div>
-
+  <div class="social-container">
+      <h3>Share { property? property.title:"Property"} To More</h3>
+      <div class="social">
+          <Email subject="{title}" body="{desc} {url}" />
+      <HackerNews class="share-button" {title} {url} />
+      <Reddit class="share-button" {title} {url} />
+      <LinkedIn class="share-button" {url} />
+      <Pinterest class="share-button" {url} media="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Svelte_Logo.svg/200px-Svelte_Logo.svg.png" description={title} />
+      <Telegram class="share-button" text={title} {url} />
+      <Vk class="share-button" {title} {url} />
+      <WhatsApp class="share-button" text="{title} {url}" />
+      <Xing class="share-button" {title} {url} />
+      <Facebook class="share-button" quote="{title}" {url} />
+      <Twitter class="share-button" text="{title}" {url} hashtags="github,svelte" via="username" related="other,users" />
+      <Line class="share-button" {url} />
+      </div>
   </div>
 
 
-<label for="#"></label>
-
-
-  <div class="floors" id="accordionExample">
-    {#each data.floors as floor, i}
-
-    <div class="floor">
-
-      <div class="row mt-3">
-        <div class="col-sm-3">
-          <label for="#">Floor Number #</label>
-          <input class="form-control" type="text" bind:value={floor.floor_number}>
-        </div>
-
-        <div class="col-sm-3">
-          <label for="#">SIZE (SQFT)</label>
-          <input class="form-control" type="text" bind:value={floor.floor_size}>
-        </div>
-
-        <div class="col-sm-3">
-          <label for="#">PERIOD OF TENURE</label>
-          <input class="form-control" type="text" bind:value={floor.period_of_tenure}>
-        </div>
-
-        <div class="col-sm-3">
-          <label for="#">TERM</label>
-          <select class="form-select" bind:value={floor.term} name="" id="">
-            <option value="negotiable">Negotiable</option>
-            <option value="non-negotiable">Non-Negotiable</option>
-          </select>
-        </div>
-
-      </div>
-
-      <div class="row mt-3">
-        
-        <div class="col-sm-3">
-          <label for="#">RATE</label>
-          <input class="form-control" type="text" bind:value={floor.rate}>
-        </div>
-        <div class="col-sm-3">
-          <label for="#">SPACE USE</label>
-          <select bind:value={floor.space_use} class="form-control">
-            <option value="office"> Office </option>
-            <option value="personal"> Personal </option>
-            <option value="warehouse"> Warehouse </option>
-            <option value="medical"> Medical </option>
-            <option value="academic"> Academic </option>
-            <option value="others"> Others </option>
-          </select>
-        </div>
-
-        <div class="col-sm-3">
-          <label for="#">CONDITION</label>
-          <select bind:value={floor.condition} class="form-control">
-            <option value="partially built"> Partially Built </option>
-            <option value="ready to use"> Ready to use</option>
-            <option value="needs repair"> Needs repair </option>
-            <option value="fully furnished"> Fully furnished </option>
-          </select>
-        </div>
-        <div class="col-sm-3">
-          <label for="#">AVAILABLE</label> 
-          <select class="form-select" bind:value={floor.avaliable} name="" id="">
-            <option value={true}>Yes</option>
-            <option value={false}>No</option>
-          </select>
-        </div>
-      </div>
-      
-      
-      
-      
   
+  
+  <div class="accordion" id="accordionExample">
+      {#each property.floors as floor, i}
+      <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={`#collapse${i}`}
 
-      <ul class="list-group amenity">
-        {#if floor.amenities}
-        <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-2">Amenities</h5>
+                  aria-expanded="false" aria-controls={`#collapse${i}`}>
+                  Floor #{floor.floor_number} | {floor.floor_size} SQFT | 2 ROOMs
+              </button>
+          </h2>
+          <div id={`collapse${i}`} class:show={i ==0} class:collapsed={i != 0} class="accordion-collapse collapse " aria-labelledby="headingOne"
+              data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+  
+                  <table class="table">
+                      <thead>
+                          <tr>
+  
+                              <th scope="col">SPACE</th>
+                              <th scope="col">SIZE</th>
+                              <th scope="col">TERM</th>
+                              <th scope="col">RATE</th>
+                              <th scope="col">SPACE USE</th>
+                              <th scope="col">CONDITION</th>
+                              <th scope="col">AVAILABLE</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td>{floor.floor_number}st Floor</td>
+                              <td>{floor.floor_size} SF</td>
+                              <td>{floor.term}</td>
+                              <td>{floor.rate}</td>
+                              <td>Office</td>
+                              <td>{floor.condition}</td>
+                              <td>{floor.avaliable?"Yes":"No"}</td>
+  
+                          </tr>
+                      </tbody>
+                  </table>
+
+                  <ul class="list-group">
+                      {#if floor.amenities}
+                      <div class="d-flex w-100 justify-content-between">
+                          <h5 class="mb-2">Amenities</h5>
+                        </div>
+                          {#each floor.amenities as amenity}
+                          <li class="list-group-item">{amenity}</li>
+                          {/each}
+                      {/if}
+                  </ul>
+              </div>
           </div>
-            <ul>
-              {#each floor.amenities as amenity, index}
-              <li class="amenities">
-                <input class="form-control" type="text" bind:value={amenity} placeholder={`Amenities No ${index+1}`}>
-                <button 
-                on:click={()=>{
-                  (data.floors[i].amenities).splice(index, 1)
-                  data.floors[i].amenities = data.floors[i].amenities
-                }} 
-                type="button" class="btn btn-danger">
-                  Remove
-                </button>
-              </li>
-              {/each}
-            </ul>
-            <button on:click={()=>{ floor.amenities = [...floor.amenities, ""]}} type="button" class="btn btn-success">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill"         
-                viewBox="0 0 16 16">
-                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
-                </svg> 
-                Amenities
-            </button>
-        {/if}
-    </ul>
+      </div>
+      {/each}
+     
+  </div>
+
+  {/if}
   
-    <button 
-    on:click={()=>{
-      (data.floors).splice(i, 1)
-      data.floors = data.floors
-    }} 
-    type="button" class="btn btn-danger">
       
-        Remove Floor
-    </button>
+  {#if property}
+  <div class="container mt-5`" style="width:70%">
+      <div class="row">
+        <div class="col-sm">
+
+          <h3 class="title-d">Quick Summary</h3>
+          <div class="list-group">
+              <li class="d-flex justify-content-between"> 
+                  <strong>Property ID:</strong>
+                  <span>{property._id}</span>
+              </li>
+
+              <li class="d-flex justify-content-between"> 
+                  <strong>Location:</strong> 
+                  <span>{property.city}, {property.zip_code}</span>
+              </li>
+
+              <li class="d-flex justify-content-between">
+                  <strong>Property Type:</strong>
+                  <span>{property.type}</span>
+              </li>
+
+              <li class="d-flex justify-content-between">
+                  <strong>Status:</strong>
+                  <span>{property.for}</span>
+              </li>
+
+              <li class="d-flex justify-content-between">
+                  <strong>Area:</strong>
+                  <span>{property.building_size} <strong>SQFt</strong></span>
+              </li>
+          </div>
+
+        </div>
+
+        <div class="col-sm">
+
+           <h3 class="title-d">Property Owner/Agent</h3>
+           {#if userData === true}
+           <div class="list-group">
+              <li class="d-flex justify-content-between"> 
+                  <strong>Name:</strong>
+                  <span>{property._id}</span>
+              </li>
+
+              <li class="d-flex justify-content-between"> 
+                  <strong>Email:</strong> 
+                  <span>{property.city}, {property.zip_code}</span>
+              </li>
+
+              <li class="d-flex justify-content-between">
+                  <strong>Phone:</strong>
+                  <span>{property.type}</span>
+              </li>
+          </div>
+          {:else}
+          <h4 class="text-danger">
+              You need to be The Logged user to see Property owner details
+          </h4>
+           {/if}
+          
+        </div>
+
+      </div>
+    </div>
+
+  <div class="container mt-5 mb-5" style="width:70%">
+      <div class="row">
+        <div class="col-sm">
+
+          <h3 class="title-d">Property Highlights</h3>
+          <div class="list-group">
+              <ul class="list-group list-group-flush">
+                  {#if property.highlights}
+                      {#each property.highlights as highlight, i}
+                      <li class="list-group-item highlight"><strong>{i+1}.</strong> {highlight}</li>
+                      {/each}
+                  {/if}
+              </ul>
+          </div>
+        </div>
+
+      </div>
     </div>
 
 
-    {/each}
- <div class="d-flex justify-content-center align-items-center">
-  <button class="btn btn-danger" on:click={()=>{addFloor()}} type="button">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill"         
-              viewBox="0 0 16 16">
-              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
-              </svg> 
-    Add Floor
+  
+  
+  {/if}
 
-  </button>
- </div>
-</div>
+  <div class="container mt-5" style="width:70%">
+      <div class="row">
+          {#if true || (property && 'video' in property)}
+              <div class="col-sm">
+                  <iframe width="100%" height="315" src="https://www.youtube.com/embed/wwYbWu_va5o" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </div>
+          {/if}
 
-
-
-  <div class="container">
-    <div class="col-12" id="map"></div>
+          <div class="col-sm">
+              <div style="width:100%;height:315px" class="col-12 map" id="map"></div>
+          </div>
+      
+      </div>
   </div>
 
 
-  <div class="d-flex justify-content-center align-items-center mb-5">
-    <button type="submit" class="btn btn-primary">Submit the property</button>
+  <div class="ad">
+      <h1>AD</h1>
   </div>
-    
-  </form>
+
+
+
+
+
 </div>
+
 
 
 
 <style lang="scss">
 
-  .highlights {
-    padding: 50px auto;
+  .ad {
+      background-color: grey;
+      display: grid;
+      place-content: center;
+      aspect-ratio: 16/4;
+      margin:5vh auto;
+      width: 70%;
   }
 
-  .amenities {
-    display: grid;
-    grid-template-columns: 0.8fr 0.2fr;
-    margin: 10px auto;
-    gap: 5px;
-  }
-
-  .amenity {
-    border: 2px rgb(65, 65, 65) solid;
-    padding: 2% 5%; 
-    margin: 2% auto;
-  }
-
-  .floors {
-    width: 80%;
-    margin: auto;
-  
-  }
-
-  .floor {
-    border: 2px rgb(255, 0, 0) solid;
-    border-radius: 5px;
-    margin: 2% auto;
-    padding: 2% 5%;
-  
-  }
-  .container{
-    margin: 35px auto;
-  
-  }
-  .img-span {
-    display: inline;
-    widows: unset;
-  }
-  .img {
-
-    .img-container{
+  .social-container {
+      width:80%;
+      margin: 2% auto;
       display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-direction: row;
-    flex-wrap: wrap;
-    }
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      flex-direction: column;
 
-    .img-span {
-      display: inline;
-      width: unset;
-    }
+  }
+  .carousel {
+      width: 70%;
+      height: 50vh;
+      overflow: hidden;
+      margin: auto
   }
 
-  label {
-    display: block;
+  .accordion {
+      width: 70%;
+      margin: 25px auto 0 auto;
   }
 
-  #map { 
-    
-        width: 100%;
-        height: 50vh; 
-
-        
+  .amenities-list {
+      
+      ul {
+          display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
       }
-  .container {
-    background-color: rgb(255, 250, 255);
-    padding-top: 2%;
-    padding-bottom: 2%;
-    border-radius: 5px;
-    box-shadow: 5px 5px 5px rgba(11, 0, 132, 0.07);
+  }
+
+  .title-d , strong {
+      color: red;
+  }
+
+
+  .accordion-button:not(.collapsed) {
+      color: red;
+  background-color: #ffe7e7;
+  }
+
+  .list-group > li:nth-child(odd) {
+      background-color: #ffe7e7;
+  }
+
+  .highlight {
+      background-color: #ffffff !important;
+  }
+
+  .list-group > li {
+      padding: 10px;
+  }
+  .list-group {
+      padding: 5px;
+      box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 40px;
   }
 </style>
