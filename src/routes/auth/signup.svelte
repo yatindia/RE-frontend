@@ -3,6 +3,7 @@
     import {API} from "../../config"
     import Swal from 'sweetalert2'
     import { passwordStrength } from 'check-password-strength'
+    import ProfileUpload from "../../components/ProfileUpload.svelte";
 
     const passwordStrengthPattern =
         /(?=^.{8,}$)(?=.*\d)(?=.*[!@#$%^&*]+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/i;
@@ -13,7 +14,8 @@
         email: "your email",
         password: "",
         passwordConfirm: "",
-        mobileNumber: ""
+        mobileNumber: "",
+        profile: ""
     }
 
    
@@ -86,12 +88,10 @@
 
 
 
-
-
     }
 
 
-
+$: console.log(form.profile);
 </script>
 <svelte:head>
   <link rel="icon" href="/img/favicon.png" />
@@ -104,6 +104,14 @@
     <form on:submit|preventDefault={()=>{submit()}} autocomplete="false" in:slide>
         <h1 class="text-center">Signup</h1>
         <br>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                  <ProfileUpload bind:avatar={form.profile} />
+                </div>
+            </div>
+        </div>
 
         <div class="form-group">
             <div class="row">
