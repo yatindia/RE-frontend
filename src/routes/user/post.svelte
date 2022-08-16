@@ -171,7 +171,8 @@
               }
               
             })
-          }if(e === 'PREMIUM'){
+          }
+          if(e === 'PREMIUM'){
           let payment = {
             "payment": {
                 "amount": 30,
@@ -184,7 +185,7 @@
                 method: "post",
                 headers: {"Authorization": `<Bearer> ${token}`},
                 url : `${PAYMENT}/payment`,
-                data : {payment}
+                data : {payment,property: {...data, photos: result}}
 
               })
       .then((response) => {
@@ -200,7 +201,7 @@
      
         
       }
-    //  async function BePro() {
+      // async function BePro() {
     
       // axios
       // .post(`${PAYMENT}/payment`, {
@@ -244,6 +245,14 @@
 //         }
 //       })
 //       .catch((err) => console.log(err.message));
+
+// await axios({
+//                 method: "post",
+//                 headers: {"Authorization": `<Bearer> ${token}`},
+//                 url : `${PAYMENT}/dummy`,
+//                 data : {"name":"sathyadev"}
+
+//               })
 //   };
 
   let filteredAmenties = []
