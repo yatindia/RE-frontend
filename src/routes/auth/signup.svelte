@@ -4,17 +4,18 @@
     import Swal from 'sweetalert2'
     import { passwordStrength } from 'check-password-strength'
     import ProfileUpload from "../../components/ProfileUpload.svelte";
+    import axios from "axios";
 
     const passwordStrengthPattern =
         /(?=^.{8,}$)(?=.*\d)(?=.*[!@#$%^&*]+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/i;
 
     let form = {
-        firstName: "",
-        lastName: "",
-        email: "your email",
-        password: "",
-        passwordConfirm: "",
-        mobileNumber: "",
+        firstName: "sdasd",
+        lastName: "asdasd",
+        email: "asdasd@dfsl",
+        password: "Mirage20#@",
+        passwordConfirm: "Mirage20#@",
+        mobileNumber: "13123123",
         profile: ""
     }
 
@@ -22,7 +23,6 @@
 
     let isPasswordMacho;
     $: isPasswordMacho = passwordStrength(form.password)
-    $: console.log(isPasswordMacho.value);
 
 
 
@@ -37,6 +37,8 @@
        
        } else if ((form.password).match(passwordStrengthPattern) == null) {
         error = "Weak password detected, \n please enter a strong password"
+       } else if ((form.profile) == null) {
+        error = "No image Selected, \n please add a profile image"
        } 
         
 
@@ -50,39 +52,63 @@
             return false
         }else{
 
-         let sendData = {
+            const image = form.profile;
+              let img = new FormData
+              img.append("image", image)
+
+              await axios({
+                method: "post",
+                url : `${API}/user/imageupload`,
+                data: {image}
+              })
+              .then(res => {
+                if (res.data.status) {
+                  
+                  return  res.data.data
+                  
+                }
+              })
+              .then(async (profileImage)=>{
+
+                let sendData = {
                 name: `${form.firstName} ${form.lastName}`,
                 email: form.email,
                 phoneNumber: form.mobileNumber,
                 password: form.password,
+                profile: profileImage
             }
 
       
-        await fetch(`${API}/auth/register`,{
-            method: "POST",
-            headers: {
-                "Content-Type" : "application/json"
-            },
+                    await fetch(`${API}/auth/register`,{
+                        method: "POST",
+                        headers: {
+                            "Content-Type" : "application/json"
+                        },
 
-            body: JSON.stringify(sendData)
-        })
-        .then(res => res.json())
-        .then(res => {
+                        body: JSON.stringify(sendData)
+                    })
+                    .then(res => res.json())
+                    .then(res => {
 
-            if (res.response.status) {
-                Swal.fire({
-                icon: "success",
-                titleText: "Email Send",
-                title: "Please check your email & verify your account. \n Email is only valid for 1hr"
-            })
-            } else {
-                Swal.fire({
-                icon: "question",
-                titleText: "Somthing Happened",
-                title: res.message
-            })
-            }
-        })
+                        console.log(res.response.message);
+
+                        if (res.response.status) {
+                            Swal.fire({
+                            icon: "success",
+                            titleText: "Email Send",
+                            text: "Please check your email & verify your account. \n Email is only valid for 1hr"
+                        })
+                        } else {
+                            Swal.fire({
+                            icon: "question",
+                            titleText: "Somthing went wrong",
+                            text: res.response.message
+                        })
+                        }
+                    })
+
+              })
+
 
         }
 
@@ -90,8 +116,6 @@
 
     }
 
-
-$: console.log(form.profile);
 </script>
 <svelte:head>
   <link rel="icon" href="/img/favicon.png" />

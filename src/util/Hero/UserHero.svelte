@@ -81,10 +81,15 @@
                 isShowBackground={true}
                 backgroundColor="#B6D5EB"
              />
+
+             <!-- <a href={()=>{}} class="btn btn-danger" download></a> -->
         
             {/if}
             
 
+          </div>
+          <div class="col-sm profile">
+              <img src={user.profile} alt="">
           </div>
 
           <div class="col-sm data">

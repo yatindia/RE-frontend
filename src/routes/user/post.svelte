@@ -117,8 +117,9 @@
 
 
             for (let index = 0; index < (data.photos).length; ++index) {
-                    const image = (data.photos)[index];
-                    let img = new FormData
+              
+              const image = (data.photos)[index];
+              let img = new FormData
               img.append("image", image)
 
               await axios({
